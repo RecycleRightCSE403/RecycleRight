@@ -6,14 +6,14 @@ quickly tell you how to do so, whether it be recyclable, compostible or garbage.
 
 # Repository Layout
 
-## App
+## [App](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/app)
 
 Contains the front and backend of the app.
 
-## CV
+## [CV](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/cv)
 
 Contains the CV model used to classify images.
 
-## ML
+## [ML](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/ml)
 
 Contains the LLM used to provide disposal suggestions for items.
