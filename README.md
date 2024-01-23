@@ -6,9 +6,13 @@ quickly tell you how to do so, whether it be recyclable, compostible or garbage.
 
 # Repository Layout
 
-## [App](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/app)
+## [Frontend](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/frontend)
 
-Contains the front and backend of the app.
+Contains the frontend of the app.
+
+## [Backend](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/backend)
+
+Contains the backend of the app.
 
 ## [CV](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/cv)
 
