@@ -1,5 +1,7 @@
 # RecycleRight
 
+**[Requirements Document](https://docs.google.com/document/d/1-tRQytuJMfVyZsZzoSbtWy3YtfJzyljXGPqbyxGmIrc/edit?usp=sharing)**
+
 ## Overview
 
 An Android app built to help you decide how to dipose of your trash. Simply
