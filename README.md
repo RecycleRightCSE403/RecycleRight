@@ -1,5 +1,8 @@
 # RecycleRight
 
+[![flutter-tests](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml)
+[![flutter-build](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml)
+
 **[Requirements Document](https://docs.google.com/document/d/1-tRQytuJMfVyZsZzoSbtWy3YtfJzyljXGPqbyxGmIrc/edit?usp=sharing)**
 
 ## Overview

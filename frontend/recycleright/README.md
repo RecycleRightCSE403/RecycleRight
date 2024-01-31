@@ -1,5 +1,8 @@
 # recycleright
 
+[![flutter-tests](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml)
+[![flutter-build](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml)
+
 A new Flutter project.
 
 ## Getting Started
