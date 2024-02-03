@@ -1,4 +1,4 @@
-name: flutter-build
+name: flutter-test
 on:
   push:
     paths:
