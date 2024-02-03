@@ -1,7 +1,6 @@
 # RecycleRight
 
-[![flutter-tests](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml)
-[![flutter-build](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml)
+[![flutter-test](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml)
 
 **[Requirements Document](https://docs.google.com/document/d/1-tRQytuJMfVyZsZzoSbtWy3YtfJzyljXGPqbyxGmIrc/edit?usp=sharing)**
 

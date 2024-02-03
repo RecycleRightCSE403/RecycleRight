@@ -1,7 +1,6 @@
 # recycleright
 
-[![flutter-tests](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_tests.yaml)
-[![flutter-build](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_build.yaml)
+[![flutter-test](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml)
 
 A new Flutter project.
 
