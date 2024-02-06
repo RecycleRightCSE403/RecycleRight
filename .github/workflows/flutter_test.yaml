@@ -4,7 +4,7 @@ on:
     paths:
       - 'frontend/recycleright/**'
       - '.github/workflows/flutter_test.yaml'
-    workflow_dispatch:
+  workflow_dispatch:
 jobs:
   drive:
     runs-on: ubuntu-latest
@@ -12,7 +12,7 @@ jobs:
       run:
         working-directory: frontend/recycleright
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         lfs: true
     - uses: actions/setup-java@v2
