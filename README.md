@@ -53,3 +53,5 @@ Contains the LLM used to provide disposal suggestions for items.
 ### Installation
 
 Instructions: Coming Soon
+
+> This project uses `git lfs` to store pictures and other larger files. You may need to install git lfs and run `git lfs install` to get all the files.
