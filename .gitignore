@@ -1,1 +1,4 @@
+# Backend Python stuff
 /backend/venv/
+/backend/__pycache__/
+
