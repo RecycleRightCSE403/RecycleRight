@@ -53,3 +53,10 @@ Contains the LLM used to provide disposal suggestions for items.
 ### Installation
 
 Instructions: Coming Soon
+
+#### Backend
+
+* Set up a Python virtual environment in `backend/venv/`
+  * Use Python 3.9
+* Install requirements using `pip install -r requirements.txt`
+* Run the server with `uvicorn main:app --reload`
