@@ -74,9 +74,9 @@ User Instructions: Coming Soon
   * For mac:
   * For windows:
 * Configure Android Emulator
-  * Click 'More Actions':
-    * Click Virtual Device Manager and activate a device by clicking the green arrow
-    * frontend/recycleright should recognize the device when you run the app with: **'flutter run'**
+  * Click 'More Actions' inside Andrioid Studio:
+    * Click Virtual Device Manager and activate a device by clicking the green arrow (Pixel device should be default)
+    * navigate to frontend/recycleright and now it should recognize the device when you run the app with: **'flutter run'**
 
 * Troubleshooting:
   * Carefully follow any recommendations from 'flutter doctor'.
