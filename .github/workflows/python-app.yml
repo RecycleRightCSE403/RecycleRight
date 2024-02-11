@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   
-  test_backend:
+  test:
     defaults:
       run:
         working-directory: backend
