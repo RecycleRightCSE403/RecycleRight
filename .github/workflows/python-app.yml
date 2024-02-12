@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   
-  test:
+  test_backend:
     defaults:
       run:
         working-directory: backend
@@ -35,7 +35,7 @@ jobs:
       run: |
         python -m pytest
 
-  test:
+  test_cv:
     defaults:
       run:
         working-directory: cv
