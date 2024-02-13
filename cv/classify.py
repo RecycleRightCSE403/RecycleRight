@@ -1,6 +1,6 @@
 import os
-import requests
 import base64
+import requests
 
 url = 'https://detect.roboflow.com/recycleright/1'
 image_folder = 'images/'
@@ -41,8 +41,3 @@ def get_highest_predictions(json_response, num_predictions=1):
         classes.append(prediction['class'])
 
     return classes
-
-
-r = classify_image('test2.jpeg')
-print(r['image'])
-print(get_highest_predictions(r))
