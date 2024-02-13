@@ -1,4 +1,4 @@
-import classify
+from cv import classify
 
 '''
 Type python -m pytest in terminal to run pytest files.
