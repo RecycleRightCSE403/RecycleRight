@@ -52,7 +52,7 @@ Contains the LLM used to provide disposal suggestions for items.
 
 ### Installation
 
-Instructions: Coming Soon
+User Instructions: Coming Soon
 
 #### Backend
 
@@ -60,3 +60,24 @@ Instructions: Coming Soon
   * Use Python 3.9
 * Install requirements using `pip install -r requirements.txt`
 * Run the server with `uvicorn main:app --reload`
+
+#### Frontend
+
+* Install Flutter
+  * run: '**flutter doctor**' follow steps if you don't have Flutter installed
+* Install Dependencies
+  *  Navigate to frontend/recycleright and run: '**flutter pub get**'
+* Install Andrioid Studio
+  * https://developer.android.com/studio?gad_source=1&gclid=CjwKCAiAt5euBhB9EiwAdkXWO_ZQq0NscVbCKYvkMKEIa5Yb-NyTwmwuexwNaMiUe8hPTGaT3Ai9dhoCvagQAvD_BwE&gclsrc=aw.ds
+  * During installation, make sure to install the Android SDK and Android SDK Platform-Tools
+* Add the Android SDK location to your PATH environment variable.
+  * For mac:
+  * For windows:
+* Configure Android Emulator
+  * Click 'More Actions' inside Andrioid Studio:
+    * Click Virtual Device Manager and activate a device by clicking the green arrow (Pixel device should be default)
+    * navigate to frontend/recycleright and now it should recognize the device when you run the app with: **'flutter run'**
+
+* Troubleshooting:
+  * Carefully follow any recommendations from 'flutter doctor'.
+  * Use 'flutter devices' command while in frontend/recycleright to list devices
