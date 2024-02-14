@@ -70,8 +70,6 @@ User Instructions: Coming Soon
 - Install [Andrioid Studio](https://developer.android.com/studio?gad_source=1&gclid=CjwKCAiAt5euBhB9EiwAdkXWO_ZQq0NscVbCKYvkMKEIa5Yb-NyTwmwuexwNaMiUe8hPTGaT3Ai9dhoCvagQAvD_BwE&gclsrc=aw.ds)
   - During installation, make sure to install the Android SDK and Android SDK Platform-Tools
 - Add the Android SDK location to your PATH environment variable.
-  - For mac:
-  - For windows:
 - Configure Android Emulator
   - Click 'More Actions' inside Andrioid Studio:
     - Click Virtual Device Manager and activate a device by clicking the green arrow (Pixel device should be default)
