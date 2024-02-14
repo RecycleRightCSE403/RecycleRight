@@ -31,13 +31,22 @@ for filename in filenames:
         print(downloaded_model_path)
 '''
 
-model_id = 'TheBloke/Mistral-7B-Instruct-v0.2-GGUF'
-os.environ['XDG_CACHE_HOME'] ='./ml/'
-llm = CTransformers(model=model_id,
-                    model_type='mistral')
-prompt = "How shoud you get rid of food waste in Seattle, WA?"
+def classify_item(item):
+    '''
+    Returns str representing how to dispose of the item properly
+    '''
+    model_id = 'TheBloke/Mistral-7B-Instruct-v0.2-GGUF'
+    os.environ['XDG_CACHE_HOME'] ='./ml/'
+    llm = CTransformers(model=model_id, model_type='mistral')
+    prompt = "How shoud you get rid of" + item + "in Seattle, WA? Categorize the response as either recycle, compost, garbage, or other based on which option is best for the environment. Give your response as one word, just stating the category. Do not say anything else."
+    answer = llm.invoke(prompt)
+    print(answer)
+    return answer
 
-response = llm.invoke(prompt)
-print(type(response))
-print(response)
 
+def main(): 
+    classify_item("battery")
+  
+  
+if __name__=="__main__": 
+    main() 
