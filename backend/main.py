@@ -1,4 +1,8 @@
 from fastapi import FastAPI, UploadFile
+import sys
+
+sys.path.append('/./ml')
+from llm import classify_item
 
 app = FastAPI()
 
@@ -15,7 +19,8 @@ async def classify_image(file: UploadFile):
 
 @app.get("/classify_text/")
 async def classify_test(text: str):
-    return {"result": text}
+    result = classify_item(text)
+    return {"result": result}
 
 
 @app.post("/report_image/")
