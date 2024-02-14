@@ -38,10 +38,39 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var result = jsonDecode(responseBody);
+        var classification = result['classification']
+            .toString()
+            .trim()
+            .replaceAll(RegExp(r'[. ]+'),
+                ''); 
+
+        String tempAdvice;
+        switch (classification) {
+          case "Recycle":
+            tempAdvice = "Please Recycle this!";
+            break;
+          case "Compost":
+            tempAdvice = "Great! This is compostable.";
+            break;
+          case "Garbage":
+            tempAdvice = "This should go to garbage.";
+            break;
+          case "Other":
+            tempAdvice = "Please dispose of this item carefully.";
+            break;
+          case "Error": // If "Error" is a possible server response
+            tempAdvice =
+                "An error occurred, check the item's disposal instructions.";
+            break;
+          default:
+            classification =
+                "Error"; // Set classification to "Error" for unknown responses
+            tempAdvice =
+                "An error occurred, check the item's disposal instructions.";
+        }
         setState(() {
-          classificationResult =
-              result['Recycle']; 
-          advice = "Thank you for recycling!";
+          classificationResult = classification;
+          advice = tempAdvice;
         });
       } else {
         setState(() {
@@ -52,7 +81,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       }
     } catch (e) {
       setState(() {
-        classificationResult = "Error";
+        classificationResult = "Error"; // Use "Error" for exceptions
         advice = "An error occurred when uploading the image.";
       });
       print(e.toString());

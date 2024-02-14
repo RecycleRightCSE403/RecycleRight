@@ -3,28 +3,56 @@ import 'package:flutter/material.dart';
 class ClassificationResultCard extends StatelessWidget {
   final String category;
   final String advice;
+
   const ClassificationResultCard({
     Key? key,
     required this.category,
-    required this.advice, required CrossAxisAlignment crossAxisAlignment,
+    required this.advice,
+    required CrossAxisAlignment crossAxisAlignment,
   }) : super(key: key);
 
-  IconData getIconForCategory(String category) {
+  // Updated to include "Garbage" and "Error" categories
+  Map<String, dynamic> getIconAndColorForCategory(String category) {
     switch (category.toLowerCase()) {
       case 'recycle':
-        return Icons.recycling;
+        return {
+          'icon': Icons.recycling,
+          'color': Colors.green,
+        };
       case 'compost':
-        return Icons.park;
-      case 'landfill':
-        return Icons.delete;
+        return {
+          'icon': Icons.park,
+          'color': Colors.lightGreen,
+        };
+      case 'other':
+        return {
+          'icon': Icons.delete,
+          'color': Colors.grey,
+        };
+      case 'garbage':
+        return {
+          'icon': Icons.delete_outline,
+          'color': Colors.brown,
+        };
+      case 'error':
+        return {
+          'icon': Icons.error_outline, 
+          'color': Colors.red, 
+        };
       default:
-        return Icons.question_mark;
+        return {
+          'icon': Icons.question_mark,
+          'color': Colors.grey,
+        };
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    IconData categoryIcon = getIconForCategory(category);
+    final categoryData = getIconAndColorForCategory(category);
+    final IconData categoryIcon = categoryData['icon'];
+    final Color color = categoryData['color'];
+
     return Card(
       elevation: 4,
       child: Padding(
@@ -35,15 +63,15 @@ class ClassificationResultCard extends StatelessWidget {
             Icon(
               categoryIcon,
               size: 48,
-              color: Colors.green,
+              color: color, 
             ),
             const SizedBox(height: 10),
             Text(
               category,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.green,
+                color: color, 
               ),
             ),
             const SizedBox(height: 5),

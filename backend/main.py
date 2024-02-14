@@ -17,8 +17,8 @@ async def classify_image(file: UploadFile = File(...)):
         file_object.write(file.file.read())
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
     
-    classification_result = "classification_placeholder"
-    
+    classification_result = "Error  ."
+
     return {"filename": file.filename, "classification": classification_result}
 
 @app.get("/classify_text/")
