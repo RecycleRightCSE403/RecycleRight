@@ -42,10 +42,10 @@ Contains the LLM used to provide disposal suggestions for items.
 
 ## Technology Stack
 
-- **Frontend:** React Native / Flutter
-- **Backend:** Python API (Django or FastAPI)
+- **Frontend:** Flutter
+- **Backend:** Python API (FastAPI)
 - **Hosting:** AWS
-- **Machine Learning/Computer Vision:** PyTorch, YOLOv7, OpenAI LLM
+- **Machine Learning/Computer Vision:** PyTorch, YOLOv7, Mistral LLM
 - **UI Design:** Figma
 
 ## Getting Started
