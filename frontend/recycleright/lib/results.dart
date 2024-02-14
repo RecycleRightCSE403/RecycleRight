@@ -26,7 +26,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
   Future<void> uploadImage(String filePath) async {
     try {
-      var uri = Uri.parse('http://10.0.2.2:8000/uploadfile/');
+      var uri = Uri.parse('http://10.0.2.2:8000/classify_image/');
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'file',
@@ -36,10 +36,12 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       var response = await request.send();
 
       if (response.statusCode == 200) {
+        var responseBody = await response.stream.bytesToString();
+        var result = jsonDecode(responseBody);
         setState(() {
-          classificationResult = "Recycle"; // default for now (maybe for demo)
-          advice =
-              "Thank you for recycling!";
+          classificationResult =
+              result['Recycle']; 
+          advice = "Thank you for recycling!";
         });
       } else {
         setState(() {
@@ -56,7 +58,6 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       print(e.toString());
     }
   }
-
 
 
   @override
@@ -79,15 +80,13 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 ),
               ),
               const SizedBox(height: 25.0),
-              if (classificationResult !=
-                  "Loading...") // just in case
+              if (classificationResult != "Loading...") // just in case
                 ClassificationResultCard(
                   category: classificationResult,
                   advice: advice,
                   crossAxisAlignment: CrossAxisAlignment.center,
                 ),
-              if (classificationResult ==
-                  "Loading...") // just in case
+              if (classificationResult == "Loading...") // just in case
                 const CircularProgressIndicator(),
             ],
           ),
