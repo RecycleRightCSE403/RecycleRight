@@ -2,3 +2,7 @@
 /backend/venv/
 /backend/__pycache__/
 /cv/images/
+
+# CV
+/cv/__pycache__/
+/cv/test/__pycache__/
