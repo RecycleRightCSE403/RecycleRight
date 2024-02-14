@@ -1,6 +1,7 @@
 # Backend Python stuff
 /backend/venv/
 /backend/__pycache__/
+/cv/images/
 
 # CV
 /cv/__pycache__/
