@@ -3,9 +3,7 @@ from fastapi import FastAPI, File, UploadFile
 import logging
 import os
 from starlette.responses import FileResponse
-import sys
-# sys.path.insert(0, "../ml")
-# from llm import classify_item
+from ml.llm import classify_item
 
 app = FastAPI()
 
@@ -31,12 +29,9 @@ async def classify_image(file: UploadFile = File(...)):
 
 @app.get("/classify_text/")
 async def classify_text(text: str = ""):
-    # I commented lines 22 & 23 for now bc I could not figure out how to 
-    # call clssify_item from ml file here. But once we merge and move
-    # cv and ml into backend, it should be easy to make it work.
-    # result = classify_item(text)
-    # return {"result": result}
-    return {"result": text}
+    result = classify_item(text)
+    logging.info(f"LLM classified object: {text}")
+    return {"result": result}
 
 @app.post("/report_image/")
 async def report_image(file: UploadFile, text: str):

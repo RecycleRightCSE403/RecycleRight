@@ -3,6 +3,27 @@ from langchain_community.llms import CTransformers
 # from huggingface_hub import hf_hub_download
 
 
+def classify_item(item):
+    '''
+    Returns str representing how to dispose of the item properly
+    '''
+    model_id = 'TheBloke/Mistral-7B-Instruct-v0.2-GGUF'
+    os.environ['XDG_CACHE_HOME'] ='./ml/'
+    llm = CTransformers(model=model_id, model_type='mistral')
+    prompt = "How shoud you get rid of" + item + "in Seattle, WA? Categorize the response as either recycle, compost, garbage, or other based on which option is best for the environment. Give your response as one word, just stating the category. Do not say anything else."
+    answer = llm.invoke(prompt)
+    print(answer)
+    return answer
+
+
+def main(): 
+    classify_item("battery")
+  
+  
+if __name__=="__main__": 
+    main() 
+
+
 '''
 HUGGING_FACE_API_KEY = os.environ.get('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')
 
@@ -30,23 +51,3 @@ for filename in filenames:
         )
         print(downloaded_model_path)
 '''
-
-def classify_item(item):
-    '''
-    Returns str representing how to dispose of the item properly
-    '''
-    model_id = 'TheBloke/Mistral-7B-Instruct-v0.2-GGUF'
-    os.environ['XDG_CACHE_HOME'] ='./ml/'
-    llm = CTransformers(model=model_id, model_type='mistral')
-    prompt = "How shoud you get rid of" + item + "in Seattle, WA? Categorize the response as either recycle, compost, garbage, or other based on which option is best for the environment. Give your response as one word, just stating the category. Do not say anything else."
-    answer = llm.invoke(prompt)
-    print(answer)
-    return answer
-
-
-def main(): 
-    classify_item("battery")
-  
-  
-if __name__=="__main__": 
-    main() 
