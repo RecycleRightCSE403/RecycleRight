@@ -16,9 +16,9 @@ async def classify_image(file: UploadFile = File(...)):
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
-    
-    classification_result = "classification_placeholder"
-    
+    # item = call cv code, and store a single string item in here
+    classification_result = "" # delete empty string and replace with: classify_item(item) 
+    # logging.info(f"LLM classified object: {item}")
     return {"filename": file.filename, "classification": classification_result}
 
 @app.get("/classify_text/")
