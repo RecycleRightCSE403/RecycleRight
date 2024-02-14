@@ -39,7 +39,7 @@ jobs:
   test_cv:
     defaults:
       run:
-        working-directory: cv
+        working-directory: backend/cv
     runs-on: ubuntu-latest
 
     steps:
