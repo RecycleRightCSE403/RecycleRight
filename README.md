@@ -48,10 +48,10 @@ Contains the LLM used to provide disposal suggestions for items.
 
 ## Technology Stack
 
-- **Frontend:** React Native / Flutter
-- **Backend:** Python API (Django or FastAPI)
-- **Hosting:** AWS (coming soon)
-- **Machine Learning/Computer Vision:** Roboflow Object Detection, Mistral LLM
+- **Frontend:** Flutter
+- **Backend:** Python API (FastAPI)
+- **Hosting:** AWS
+- **Machine Learning/Computer Vision:** PyTorch, YOLOv7, Mistral LLM
 - **UI Design:** Figma
 
 ## Getting Started
@@ -93,8 +93,6 @@ To run tests:
 - Install [Andrioid Studio](https://developer.android.com/studio?gad_source=1&gclid=CjwKCAiAt5euBhB9EiwAdkXWO_ZQq0NscVbCKYvkMKEIa5Yb-NyTwmwuexwNaMiUe8hPTGaT3Ai9dhoCvagQAvD_BwE&gclsrc=aw.ds)
   - During installation, make sure to install the Android SDK and Android SDK Platform-Tools
 - Add the Android SDK location to your PATH environment variable.
-  - For mac:
-  - For windows:
 - Configure Android Emulator
   - Click 'More Actions' inside Andrioid Studio:
     - Click Virtual Device Manager and activate a device by clicking the green arrow (Pixel device should be default)

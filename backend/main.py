@@ -1,14 +1,14 @@
-
 from fastapi import FastAPI, File, UploadFile
 import logging
 import os
 from starlette.responses import FileResponse
 from ml.llm import classify_item
+from cv.classify import classify_image, get_highest_predictions
 
 app = FastAPI()
 
 # Directory to store images
-UPLOAD_DIRECTORY = "../cv/images"
+UPLOAD_DIRECTORY = "images"
 
 @app.post("/classify_image/")
 async def classify_image(file: UploadFile = File(...)):
@@ -16,9 +16,13 @@ async def classify_image(file: UploadFile = File(...)):
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
-    
-    classification_result = "Error  ."
-
+    json_response = classify_image(file.filename)
+    classes = get_highest_predictions(json_reponse)
+    if len(classes) == 0:
+        return {"filename": file.filename, "classification": "Error"}
+    item = classes[0]
+    classification_result = classify_item(item) 
+    # logging.info(f"LLM classified object: {item}")
     return {"filename": file.filename, "classification": classification_result}
 
 @app.get("/classify_text/")
