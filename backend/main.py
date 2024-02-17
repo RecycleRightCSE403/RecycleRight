@@ -2,7 +2,7 @@ from fastapi import FastAPI, File, UploadFile
 import logging
 import os
 from starlette.responses import FileResponse
-from ml.llm import classify_item
+from ml.gemini_llm import classify_item
 from cv.classify import get_highest_predictions
 import cv.classify
 
