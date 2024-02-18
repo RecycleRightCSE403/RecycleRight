@@ -37,15 +37,28 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 
 
 def classify_item(item):
+    '''
+    Given an item, asks llm to classify it as one of: garbage, compost, recycle, donate, or special.
+    Returns this classification.
+    '''
     convo = model.start_chat()
-    convo.send_message(f"Give a one word classification of how to dispose of the following item, either recycle, "
-                       f"compost, garbage, or other: {item}")
+    # convo.send_message(f"Give a one word classification of how to dispose of the following item, either recycle, "
+                       # f"compost, garbage, or other: {item}")
+    convo.send_message(f"Give a one word classification of how to dispose of" + item + " in Seattle as either garbage bin, "
+                       f"compost bin, recycling bin, donate, or special if there are drop-off locations for the item. Suggest "
+                       f"garbage only as a last resort if the item cannot possibly be in any of the other categories.")
     print(convo.last.text)
     return convo.last.text
 
+def clean_up_classification(initial_classification):
+    '''
+    Given an item, cleans up classification and returns clean version.
+    '''
+
 
 def main():
-    classify_item("battery")
+    classification = classify_item("battery")
+
 
 
 if __name__ == "__main__":
