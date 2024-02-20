@@ -9,7 +9,7 @@ api_key = os.environ.get('ROBOFLOW_API_KEY')
 if api_key is None:
     raise Exception('ROBOFLOW_API_KEY environment variable does not exist')
 
-def classify_image(image_file, image_folder=image_folder, api_key=api_key):
+def run_model(image_file, image_folder=image_folder, api_key=api_key):
     try:
         with open(image_folder + image_file, 'rb') as image_file:
             image_data = image_file.read()
@@ -31,7 +31,7 @@ def classify_image(image_file, image_folder=image_folder, api_key=api_key):
     return response.json()
 
 
-def get_highest_predictions(json_response, num_predictions=1):
+def parse_response(json_response, num_predictions=1):
     if len(json_response['predictions']) == 0:
         return []
     # Sorted by confidence, so 0 would be the highest confidence item
@@ -41,3 +41,6 @@ def get_highest_predictions(json_response, num_predictions=1):
         classes.append(prediction['class'])
 
     return classes
+
+def classify_image(image_file, image_folder=image_folder, api_key=api_key, num_predictions=1):
+    return parse_response(run_model(image_file, image_folder, api_key), num_predictions)

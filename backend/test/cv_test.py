@@ -7,7 +7,6 @@ test_ as per standard pytest conventions.
 '''
 
 def test_classify_image():
-    json_response = classify.classify_image('test2.jpeg')
-    classes = classify.get_highest_predictions(json_response)
+    classes = classify.classify_image('test2.jpeg')
     assert len(classes) == 1
     assert classes[0] == 'Plastic film'

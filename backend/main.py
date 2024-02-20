@@ -16,8 +16,7 @@ async def classify_image(file: UploadFile = File(...)):
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
-    json_response = classify_image(file.filename)
-    classes = get_highest_predictions(json_reponse)
+    classes = classify_image(file.filename)
     if len(classes) == 0:
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
