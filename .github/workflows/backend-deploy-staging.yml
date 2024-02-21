@@ -22,5 +22,6 @@ jobs:
         HOSTNAME: ${{ secrets.STAGING_HOSTNAME }}
       run: |
         echo $SSH_KEY >> key.pem
+        chmod 400 key.pem
         ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$HOSTNAME DEPLOY_SHA=$GITHUB_SHA ROBOFLOW_API_KEY=$ROBOFLOW_API_KEY GEMINI_API_KEY=$GEMINI_API_KEY 'bash -s' < backend/deploy_ec2.sh
   
