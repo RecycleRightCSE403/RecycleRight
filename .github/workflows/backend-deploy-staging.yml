@@ -10,10 +10,8 @@ permissions:
   contents: read
 
 jobs:
-
-  runs-on: ubuntu-latest
-
   deploy_backend:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
     - name: deploy
