@@ -1,0 +1,28 @@
+name: backend-deploy-staging
+
+on:
+  push:
+    tags:
+      - stage**
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+
+  runs-on: ubuntu-latest
+
+  deploy_backend:
+    steps:
+    - uses: actions/checkout@v3
+    - name: deploy
+      env:
+        ROBOFLOW_API_KEY: ${{ secrets.ROBOFLOW_API_KEY }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+        HOSTNAME: ${{ secrets.STAGING_HOSTNAME }}
+      run: |
+        echo $SSH_KEY >> key.pem
+        ssh -i key.pem ubuntu@$HOSTNAME DEPLOY_SHA=$GITHUB_SHA ROBOFLOW_API_KEY=$ROBOFLOW_API_KEY GEMINI_API_KEY=$GEMINI_API_KEY 'bash -s' < backend/deploy_ec2.sh
+  
