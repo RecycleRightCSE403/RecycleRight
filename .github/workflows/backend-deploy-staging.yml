@@ -14,14 +14,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+    # - name: deploy
+    #   env:
+    #     ROBOFLOW_API_KEY: ${{ secrets.ROBOFLOW_API_KEY }}
+    #     GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    #     SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
+    #     HOSTNAME: ${{ secrets.STAGING_HOSTNAME }}
+    #   run: |
+    #     echo $SSH_KEY >> key.pem
+    #     chmod 400 key.pem
+    #     ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$HOSTNAME DEPLOY_SHA=$GITHUB_SHA ROBOFLOW_API_KEY=$ROBOFLOW_API_KEY GEMINI_API_KEY=$GEMINI_API_KEY 'bash -s' < backend/deploy_ec2.sh
+
     - name: deploy
+      uses: appleboy/ssh-action@v1.0.3
       env:
         ROBOFLOW_API_KEY: ${{ secrets.ROBOFLOW_API_KEY }}
         GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        SSH_KEY: ${{ secrets.STAGING_SSH_KEY }}
-        HOSTNAME: ${{ secrets.STAGING_HOSTNAME }}
-      run: |
-        echo $SSH_KEY >> key.pem
-        chmod 400 key.pem
-        ssh -o StrictHostKeyChecking=no -i key.pem ubuntu@$HOSTNAME DEPLOY_SHA=$GITHUB_SHA ROBOFLOW_API_KEY=$ROBOFLOW_API_KEY GEMINI_API_KEY=$GEMINI_API_KEY 'bash -s' < backend/deploy_ec2.sh
+      with:
+        host: ${{ secrets.STAGING_HOSTNAME }}
+        username: "ubuntu"
+        key: ${{ secrets.STAGING_SSH_KEY }}
+        port: 22
+        envs: GITHUB_SHA,ROBOFLOW_API_KEY,GEMINI_API_KEY
+        script: |
+          rm -r RecycleRight
+          git clone https://github.com/RecycleRightCSE403/RecycleRight.git
+          cd RecycleRight/
+          git reset --hard $GITHUB_SHA
+          cd backend/
+          python3 -m venv venv
+          source venv/bin/activate
+          pip3 install -r requirements.txt
+          echo ROBOFLOW_API_KEY=$ROBOFLOW_API_KEY > .env
+          echo GEMINI_API_KEY=$GEMINI_API_KEY >> .env
+          pip3 install gunicorn
+          sudo systemctl daemon-reload
+          sudo systemctl restart gunicorn
+          sudo systemctl restart nginx
   
