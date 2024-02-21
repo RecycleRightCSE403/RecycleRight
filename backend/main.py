@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
 from starlette.responses import FileResponse
@@ -7,6 +8,15 @@ from cv.classify import get_highest_predictions
 import cv.classify
 
 app = FastAPI()
+
+origins = ["*"]
+app.add_middleware(
+ CORSMiddleware,
+ allow_origins=origins,
+ allow_credentials=True,
+ allow_methods=["*"],
+ allow_headers=["*"],
+)
 
 # Directory to store images
 UPLOAD_DIRECTORY = "images"

@@ -8,3 +8,4 @@ requests
 langchain
 ctransformers
 google-generativeai
+python-dotenv
