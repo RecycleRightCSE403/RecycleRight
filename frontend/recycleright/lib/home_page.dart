@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'results.dart';
 import 'text_classification_result_screen.dart';
+import 'about_page.dart'; // Make sure to import the AboutPage class
 
 class MyHomePage extends StatefulWidget {
   final CameraDescription camera;
@@ -71,6 +72,36 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Theme.of(context).primaryColor,
+              ),
+              child: Text(
+                'Menu',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.info_outline),
+              title: Text('About'),
+              onTap: () {
+                Navigator.of(context).pop(); // Close the drawer
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const AboutPage(),
+                ));
+              },
+            ),
+            // Add other ListTile widgets for more navigation options as needed
+          ],
+        ),
       ),
       body: Column(
         children: [
