@@ -1,9 +1,9 @@
-name: backend-deploy-staging
+name: backend-deploy-prod
 
 on:
   push:
     tags:
-      - stage**
+      - v**
   workflow_dispatch:
 
 permissions:
@@ -26,7 +26,7 @@ jobs:
         port: 22
         envs: GITHUB_SHA,ROBOFLOW_API_KEY,GEMINI_API_KEY
         script: |
-          cd staging/
+          cd prod/
           git pull
           git reset --hard $GITHUB_SHA
           cd backend/
@@ -37,6 +37,6 @@ jobs:
           echo GEMINI_API_KEY=$GEMINI_API_KEY >> .env
           pip3 install gunicorn
           sudo systemctl daemon-reload
-          sudo systemctl restart gunicorn-staging
+          sudo systemctl restart gunicorn-prod
           sudo systemctl restart nginx
   
