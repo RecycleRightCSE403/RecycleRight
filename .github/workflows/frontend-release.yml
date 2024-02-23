@@ -25,7 +25,7 @@ jobs:
     - run: |
         flutter pub get
         flutter build apk
-        mv build/app/outputs/apk/app-release.apk recycle_right.apk
+        mv build/app/outputs/flutter-apk/app-release.apk recycle_right.apk
     - uses: softprops/action-gh-release@v1
       with:
         prerelease: startswith(github.ref, 'refs/tags/stage')
