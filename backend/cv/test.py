@@ -1,4 +1,4 @@
 import classify
 
-response = classify.run_model('test2.jpeg', image_folder='../images/')
-print(response['predictions'])
+response = classify.run_model('test3.jpeg', image_folder='../images/')
+print(response)
