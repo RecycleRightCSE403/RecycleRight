@@ -3,7 +3,7 @@ import logging
 import os
 from starlette.responses import FileResponse
 from ml.llm import classify_item
-from cv.classify import classify_image, get_highest_predictions
+from cv.classify import classify_image
 
 app = FastAPI()
 
