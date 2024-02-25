@@ -8,8 +8,12 @@ url = 'https://detect.roboflow.com/recycleright/1'
 image_folder = 'images/'
 
 # load api key from environment
-load_dotenv()
+# check if it is on the system
 api_key = os.environ.get('ROBOFLOW_API_KEY')
+# if not then load local variable from .env
+if api_key is None:
+    load_dotenv()
+    api_key = os.environ.get('ROBOFLOW_API_KEY')
 if api_key is None:
     raise Exception('ROBOFLOW_API_KEY environment variable does not exist')
 
