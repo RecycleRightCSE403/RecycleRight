@@ -6,6 +6,10 @@ Create functions with a name starting with
 test_ as per standard pytest conventions.
 '''
 
+def test_run_model():
+    response = classify.run_model('test2.jpeg')
+    print(response)
+
 def test_classify_image():
     classes = classify.classify_image('test2.jpeg')
     assert len(classes) == 1
