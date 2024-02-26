@@ -20,7 +20,7 @@ async def classify_image(file: UploadFile = File(...)):
     if len(classes) == 0:
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
-    classification_result = classify_item(item) 
+    classification_result = classify_item(item)
     # logging.info(f"LLM classified object: {item}")
     return {"filename": file.filename, "classification": classification_result}
 
