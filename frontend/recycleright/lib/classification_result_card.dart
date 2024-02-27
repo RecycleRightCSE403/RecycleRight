@@ -7,43 +7,23 @@ class ClassificationResultCard extends StatelessWidget {
   const ClassificationResultCard({
     Key? key,
     required this.category,
-    required this.advice,
-    required CrossAxisAlignment crossAxisAlignment,
+    required this.advice, required Widget adviceWidget,
   }) : super(key: key);
 
-  // Updated to include "Garbage" and "Error" categories
-  Map<String, dynamic> getIconAndColorForCategory(String category) {
+ Map<String, dynamic> getIconAndColorForCategory(String category) {
     switch (category.toLowerCase()) {
       case 'recycle':
-        return {
-          'icon': Icons.recycling,
-          'color': Colors.green,
-        };
+        return {'icon': Icons.recycling, 'color': Colors.green};
       case 'compost':
-        return {
-          'icon': Icons.park,
-          'color': Colors.lightGreen,
-        };
-      case 'other':
-        return {
-          'icon': Icons.delete,
-          'color': Colors.grey,
-        };
+        return {'icon': Icons.park, 'color': Colors.lightGreen};
       case 'garbage':
-        return {
-          'icon': Icons.delete_outline,
-          'color': Colors.brown,
-        };
-      case 'error':
-        return {
-          'icon': Icons.error_outline, 
-          'color': Colors.red, 
-        };
+        return {'icon': Icons.delete_outline, 'color': Colors.brown};
+      case 'donate':
+        return {'icon': Icons.volunteer_activism, 'color': Colors.purple};
+      case 'special':
+        return {'icon': Icons.star, 'color': Colors.orange};
       default:
-        return {
-          'icon': Icons.question_mark,
-          'color': Colors.grey,
-        };
+        return {'icon': Icons.help_outline, 'color': Colors.grey};
     }
   }
 
@@ -54,33 +34,44 @@ class ClassificationResultCard extends StatelessWidget {
     final Color color = categoryData['color'];
 
     return Card(
-      elevation: 4,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              categoryIcon,
-              size: 48,
-              color: color, 
-            ),
-            const SizedBox(height: 10),
-            Text(
-              category,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: color, 
+      elevation: 8,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2), // just changin the background
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                categoryIcon,
+                size: 60,
+                color: color,
               ),
-            ),
-            const SizedBox(height: 5),
-            Text(
-              advice,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Text(
+                category,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                advice,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500, 
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
