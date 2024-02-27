@@ -7,4 +7,4 @@ pytest
 requests
 langchain
 ctransformers
-dotenv==0.0.5
+python-dotenv
