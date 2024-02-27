@@ -1,0 +1,36 @@
+name: frontend-release
+
+on:
+  push:
+    tags: 
+      - "stage**"
+      - "v**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release_frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/recycleright
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.9'
+    - run: |
+        flutter pub get
+        flutter build apk
+        mv build/app/outputs/flutter-apk/app-release.apk recycle_right.apk
+    - uses: softprops/action-gh-release@v1
+      with:
+        prerelease: startswith(github.ref, 'refs/tags/stage')
+        files: frontend/recycleright/recycle_right.apk
+      
