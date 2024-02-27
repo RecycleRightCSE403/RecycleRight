@@ -10,7 +10,7 @@ app = FastAPI()
 UPLOAD_DIRECTORY = "images"
 
 @app.post("/classify_image/")
-async def classify_image(file: UploadFile = File(...)):
+async def classify_image_endpoint(file: UploadFile = File(...)):
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
