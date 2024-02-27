@@ -48,8 +48,9 @@ def run_model(image_file, image_folder=image_folder, api_key=api_key):
     image_base64 = '\n'.join(image_base64[i : i + 76] for i in range(0, len(image_base64), 76))
 
     headers = { 'Content-Type': 'application/x-www-form-urlencoded' }
+    params = { 'api_key': api_key, 'confidence': 1 }
 
-    response = requests.post(url, data=image_base64, headers=headers, params={'api_key': api_key})
+    response = requests.post(url, data=image_base64, headers=headers, params=params)
 
     if not response.ok:
         raise Exception(f'{response.status_code} Error: {response.text}')
@@ -74,7 +75,6 @@ def parse_response(json_response, max_predictions=1):
     if len(json_response['predictions']) == 0:
         return []
     # Sorted by confidence, so 0 would be the highest confidence item
-    #print(json_response['predictions'][0]['class'])
     classes = []
     for prediction in json_response['predictions'][:max_predictions]:
         classes.append(prediction['class'])

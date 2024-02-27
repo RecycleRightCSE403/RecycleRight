@@ -50,8 +50,8 @@ def test_classify_image():
     assert classes[0] == 'Plastic film'
 
 def test_classify_less_than_expected():
-    classes = classify.classify_image('test2.jpeg', max_predictions=2)
-    assert len(classes) == 1
+    classes = classify.classify_image('test2.jpeg', max_predictions=10)
+    assert len(classes) == 7
     assert classes[0] == 'Plastic film'
 
 def test_classify_more_than_expected():
@@ -59,5 +59,5 @@ def test_classify_more_than_expected():
     assert len(classes) == 0
 
 def test_classify_empty():
-    classes = classify.classify_image('test3.jpeg')
+    classes = classify.classify_image('black.jpg')
     assert len(classes) == 0
