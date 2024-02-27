@@ -1,11 +1,10 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 import os
 from starlette.responses import FileResponse
 from ml.gemini_llm import classify_item
-from cv.classify import get_highest_predictions
-import cv.classify
+from cv.classify import classify_image
 
 app = FastAPI()
 
@@ -22,25 +21,28 @@ app.add_middleware(
 UPLOAD_DIRECTORY = "images"
 
 @app.post("/classify_image/")
-async def classify_image(file: UploadFile = File(...)):
+async def classify_image_endpoint(file: UploadFile = File(...)):
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
-    json_response = cv.classify.classify_image(file.filename)
-    classes = get_highest_predictions(json_response)
+    classes = classify_image(file.filename)
     if len(classes) == 0:
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
     classification_result = classify_item(item)
-    # logging.info(f"LLM classified object: {item}")
+    logging.info(f"LLM classified object: {item}")
+    logging.info(f"Classification: {item}")
     return {"filename": file.filename, "classification": classification_result}
 
-@app.get("/classify_text/")
-async def classify_text(text: str = ""):
-    result = classify_item(text)
-    logging.info(f"LLM classified object: {text}")
-    return {"result": result}
+@app.post("/classify_text/")
+async def classify_text(text: str = Body(..., embed=True)):
+    if not text:
+        raise HTTPException(status_code=400, detail="Text is required for classification.")
+    logging.info(f"Received text for classification: {text}")
+    classification_result = classify_item(text)
+    logging.info(f"LLM classified text: {text} as {classification_result}")
+    return {"text": text, "classification": classification_result}
 
 @app.post("/report_image/")
 async def report_image(file: UploadFile, text: str):
