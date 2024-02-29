@@ -22,6 +22,22 @@ UPLOAD_DIRECTORY = "images"
 
 @app.post("/classify_image/")
 async def classify_image_endpoint(file: UploadFile = File(...)):
+    '''
+    Takes an input image and returns a map of the proper ways to dispose of 
+    items in the image.
+
+        Params:
+            file (UploadFile): The image file of trash to be disposed of.
+
+        Returns:
+            dict: Maps 'filename' to the name of the input file and 
+                'classification' to the response of how to dispose of the item
+                in the image.
+
+        Raises:
+            FileNotFoundError: If file is not found in the UPLOAD_DIRECTORY.
+            Exception: If calling the CV api does not respond with code 200.
+    '''
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
     with open(file_location, "wb+") as file_object:
         file_object.write(file.file.read())
@@ -37,6 +53,18 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
 
 @app.post("/classify_text/")
 async def classify_text(text: str = Body(..., embed=True)):
+    '''
+    Take an input string and returns a map of the proper ways to dipose of it.
+
+        Params:
+            text (string): The name of the item.
+
+        Returns:
+            dict: Maps 'result' to the response of how to dispose of the item.
+
+        Raises:
+            HTTPException: Raises with error code 400 if text is empty.
+    '''
     if not text:
         raise HTTPException(status_code=400, detail="Text is required for classification.")
     logging.info(f"Received text for classification: {text}")
