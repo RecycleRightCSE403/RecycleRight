@@ -36,7 +36,8 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
 
         Raises:
             FileNotFoundError: If file is not found in the UPLOAD_DIRECTORY.
-            Exception: If calling the CV api does not respond with code 200.
+            requests.exceptions.HTTPError: If calling the CV api does not 
+                respond with code 200.
     '''
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
     with open(file_location, "wb+") as file_object:
