@@ -39,8 +39,21 @@ model = genai.GenerativeModel(model_name="gemini-1.0-pro",
 
 def classify_item(item):
     '''
-    Given an item, asks llm to classify it as one of: garbage, compost, recycle, donate, or special.
-    Returns this classification.
+    Given a string item, returns a response of how to dispose of it properly.
+
+        Params:
+            item (string): The item to dispose.
+
+        Returns:
+            dict: A dict with the following keys: 'classification', 'location'
+                and 'specifications'. 'classification' maps to one of 'garbage',
+                'compost', 'recycle', 'donate', 'special' or 'LLM unable to 
+                properly classify'. 'location' maps to a list of locations to 
+                dispose of the item. 'specifications' maps to a string response 
+                of how to dispose of the item. In the case that classification
+                fails, 'classification' will map to 'LLM unable to properly
+                classify' and 'location' and 'specifications' will not be in the
+                dict.
     '''
     response = dict()
     convo = model.start_chat()
@@ -67,7 +80,7 @@ def classify_item(item):
                            f"as a semicolon separated list where each element is of the following format: Location name: location adress")
         locations_string = convo.last.text
         print("Donation Locations String", locations_string)
-        locations_list = get_list_from_string(locations_string)
+        locations_list = locations_string.split('; ')
         print("Donation Locations List", locations_list)
         response["locations"] = locations_list
 
@@ -77,7 +90,7 @@ def classify_item(item):
                            f"as a semicolon separated list where each element is of the following format: Location name: location adress")
         locations_string = convo.last.text
         print("Special Locations String", locations_string)
-        locations_list = get_list_from_string(locations_string)
+        locations_list = locations_string.split('; ')
         print("Special Locations List", locations_list)
         response["locations"] = locations_list
 
@@ -87,37 +100,41 @@ def classify_item(item):
                            f"of the format: specification 1; specification 2; etc")
         specification_string = convo.last.text
         print("Recycling Specification String", specification_string)
-        specification_list = get_list_from_string(specification_string)
+        specification_list = specification_string.split('; ')
         print("Recycling Specification List", specification_list)
         response["specifications"] = specification_list
     return response
 
 
-def get_list_from_string(string_list):
-    '''
-    Given a string list where each item is separated by a semicolon, returns a python list with those elements
-    '''
-    return string_list.split("; ")
-    
-
 def clean_up_classification(initial_classification):
     '''
-    Given an item, cleans up classification and returns clean version.
+    Given a initial string classification, returns a string classification. 
+
+        Params:
+            initial_classification (string): An initial classification that maps
+                to one of the possible classifications
+
+        Returns:
+            string: One of either 'garbage', 'compost', 'recycle', 'donate', 
+            'special' or 'LLM unable to properly classify'.
     '''
+    # recycle sometimes shows up as recycling, searching for recycl catches this
+    # case
+    possible_classifications = {
+            'garbage': 'garbage',
+            'compost': 'compost',
+            'recycl': 'recycle',
+            'donate': 'donate',
+            'special': 'special',
+            }
     lower_case = initial_classification.lower()
 
-    if "garbage" in lower_case:
-        return "garbage"
-    elif "compost" in lower_case:
-        return "compost"
-    elif "recycl" in lower_case:
-        return "recycle"
-    elif "donate" in lower_case:
-        return "donate"
-    elif "special" in lower_case:
-        return "special"
-    else:
-        return "LLM unable to properly classify"
+    for k, v in possible_classifications.items():
+        if k in lower_case:
+            return v
+        
+    return "LLM unable to properly classify"
+
 
 def main():
     classify_item("cardboard box")
