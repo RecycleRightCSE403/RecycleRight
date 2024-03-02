@@ -12,6 +12,8 @@ See our **[Requirements Document](https://docs.google.com/document/d/1-tRQytuJMf
 
 This is a group project for [CSE 403](https://courses.cs.washington.edu/courses/cse403/24wi/), Software Engineering, at the University of Washington.
 
+For instructions on how to download, install, and use our app, see the [user's guide](#users-guide) below.
+
 ## Contents
 
  * [Overview](#overview)
@@ -20,6 +22,10 @@ This is a group project for [CSE 403](https://courses.cs.washington.edu/courses/
     + [Development](#development)
     + [Troubleshooting](#troubleshooting)
     + [Development Guidelines](#development-guidelines)
+ * [User's Guide](#users-guide)
+    + [Installation](#installation)
+    + [Updating](#updating)
+    + [Usage](#usage) 
 
 ## Developer's Guide
 
@@ -119,3 +125,54 @@ To add a test on the backend:
       * Contains our object detection model code for identifying objects
     * [backend/ml](https://github.com/RecycleRightCSE403/RecycleRight/tree/main/backend/ml)
       * Contains our LLM code for classifying identified objects into their waste type
+     
+## User's Guide
+
+### Installation
+
+Pre-requisites: The following instructions must be done on an Android Device running Android 5.0 (API level 21) or later.
+
+1. Visit [https://github.com/RecycleRightCSE403/RecycleRight/releases/latest](https://github.com/RecycleRightCSE403/RecycleRight/releases/latest) to access the latest version of the app
+2. Under Assets, click on `recycle_right.apk` and download the apk file
+   
+   <img src='images/releases-page.png' height=480>
+   
+3. You will likely see a message about a harmful file type. Click Download anyway
+
+   <img src='images/download-harmful.png' height=480>
+   
+4. Open your downloads folder from your browser and click on the downloaded apk file
+   
+   <img src='images/downloads-menu.png' height=480>
+   <img src='images/downloads-file.png' height=480>
+
+5. If prompted with a message about installing apps from this source, follow the link to your settings to allow the installation
+   
+   <img src='images/security-settings.png' height=480>
+   <img src='images/install-unknown.png' height=480>
+   
+6. Once installation is allowed you should be prompted with a message to install recycleright, click on Install
+   1. If you are not automatically prompted, return to step 3
+   
+   <img src='images/install.png' height=480>
+   
+7. Once installation finishes, click Open
+   
+   <img src='images/app-installed.png' height=480>
+   
+8. Click `While using the app` for both Video and Audio permissions when prompted
+   
+   <img src='images/camera-permission.png' height=480>
+   <img src='images/audio-permission.png' height=480>
+   
+9. The app is now setup and ready to use!
+   
+   <img src='images/main-app-screen.png' height=480>
+
+### Updating
+
+To update, follow the same instructions above in the [installation](#installation) instructions. If you encounter an error, uninstall the old version and try again. Some steps may only be necessary on the first install and can be skipped for upgrades.   
+
+### Usage
+
+TODO
