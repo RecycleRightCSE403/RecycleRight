@@ -5,7 +5,13 @@ from langchain_community.llms import CTransformers
 
 def classify_item(item):
     '''
-    Returns str representing how to dispose of the item properly
+    Returns a response of how to dispose of the input properly.
+
+        Params:
+            item (string): The item we are disposing.
+
+        Returns:
+            string: A response of how to dispose of the item properly.
     '''
     model_id = 'TheBloke/Mistral-7B-Instruct-v0.2-GGUF'
     os.environ['XDG_CACHE_HOME'] ='./ml/'

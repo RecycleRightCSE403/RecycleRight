@@ -34,7 +34,8 @@ def run_model(image_file, image_folder=image_folder, api_key=api_key):
 
         Raises:
             FileNotFoundError: If image_file is not found in image_folder.
-            Exception: If the CV model does not respond with code 200.
+            requests.exceptions.HTTPError: If the CV model does not respond with
+                code 200.
     '''
     try:
         with open(image_folder + image_file, 'rb') as image_file:
@@ -53,7 +54,7 @@ def run_model(image_file, image_folder=image_folder, api_key=api_key):
     response = requests.post(url, data=image_base64, headers=headers, params=params)
 
     if not response.ok:
-        raise Exception(f'{response.status_code} Error: {response.text}')
+        response.raise_for_status()
 
     return response.json()
 
