@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:recycleright/config.dart';
 import 'classification_result_card.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -26,7 +27,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
   Future<void> uploadImage(String filePath) async {
     try {
-      var uri = Uri.parse('http://10.0.2.2:8000/classify_image/');
+      var uri = Uri.parse('${getServerBaseUrl()}/classify_image/');
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'file',
