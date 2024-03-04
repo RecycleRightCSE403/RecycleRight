@@ -84,17 +84,17 @@ async def get_link(item: str, classification: str):
 
         Params:
             item (string): The name of the item.
-            classifcation (string): The classification of the item (recycle or special).
+            classifcation (string): The classification of the item (donate or special).
 
         Returns:
             dict: Maps 'link' to the link to a google search of locations to dispose of the item.
 
         Raises:
-            HTTPException: Raises with error code 400 if given classification is anything other than recycle or special.
+            HTTPException: Raises with error code 400 if given classification is anything other than donate or special.
     '''
     if classification == "special":
         return {"link": "https://www.google.com/search?q=where+to+drop+off+" + item + "+in+Seattle"}
-    elif classification == "recycle":
+    elif classification == "donate":
         return {"link": "https://www.google.com/search?q=donation+centers+in+seattle"}
     else:
-        raise HTTPException(status_code=400, detail="The given classification is " + classification + " but must be either recycle or special.")
+        raise HTTPException(status_code=400, detail="The given classification is " + classification + " but must be either donate or special.")
