@@ -76,3 +76,10 @@ async def classify_text(text: str = Body(..., embed=True)):
 @app.post("/report_image/")
 async def report_image(file: UploadFile, text: str):
     return {"filename": file}
+
+@app.post("/get_link_of_locations")
+async def report_image(item: str, classification: str):
+    if classification == "special":
+        return {"link": "https://www.google.com/search?q=where+to+drop+off+" + item + "+in+Seattle"}
+    elif classification == "recycle":
+        return {"link": "https://www.google.com/search?q=donation+centers+in+seattle"}
