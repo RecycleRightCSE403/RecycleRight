@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:recycleright/config.dart';
 import 'dart:convert';
 import 'classification_result_card.dart';
 
@@ -26,7 +27,7 @@ class _TextClassificationResultScreenState
   }
 
   Future<void> classifyText(String text) async {
-    var uri = Uri.parse('http://10.0.2.2:8000/classify_text/');
+    var uri = Uri.parse('${getServerBaseUrl()}/classify_text/');
     var response = await http.post(uri,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({"text": text}));
@@ -73,7 +74,13 @@ class _TextClassificationResultScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Text Classification Results'),
+        title: const Text(
+          'Text Results',
+          style: TextStyle(
+            fontSize: 35, 
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Center(

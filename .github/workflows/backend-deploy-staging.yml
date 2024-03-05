@@ -26,8 +26,9 @@ jobs:
         port: 22
         envs: GITHUB_SHA,ROBOFLOW_API_KEY,GEMINI_API_KEY
         script: |
+          rm -rf staging
+          git clone https://github.com/RecycleRightCSE403/RecycleRight.git staging
           cd staging/
-          git pull
           git reset --hard $GITHUB_SHA
           cd backend/
           python3 -m venv venv

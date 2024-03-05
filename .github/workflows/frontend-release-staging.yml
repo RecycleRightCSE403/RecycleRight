@@ -1,10 +1,9 @@
-name: frontend-release
+name: frontend-release-staging
 
 on:
   push:
     tags: 
       - "stage**"
-      - "v**"
   workflow_dispatch:
 
 permissions:
@@ -25,12 +24,15 @@ jobs:
     - uses: subosito/flutter-action@v2
       with:
         flutter-version: '3.16.9'
-    - run: |
+    - name: build apk
+      env:
+        SERVER_URL: ${{ secrets.SERVER_BASE_IP }}
+      run: |
         flutter pub get
-        flutter build apk
+        flutter build apk --release --dart-define SERVER_BASE_URL="${SERVER_URL}staging"
         mv build/app/outputs/flutter-apk/app-release.apk recycle_right.apk
     - uses: softprops/action-gh-release@v1
       with:
-        prerelease: startswith(github.ref, 'refs/tags/stage')
+        prerelease: true
         files: frontend/recycleright/recycle_right.apk
       
