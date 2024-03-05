@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class ClassificationResultCard extends StatelessWidget {
   final String category;
-  final String advice;
+  final Widget adviceWidget;
 
   const ClassificationResultCard({
     Key? key,
     required this.category,
-    required this.advice, required Widget adviceWidget,
+    required this.adviceWidget,
   }) : super(key: key);
 
- Map<String, dynamic> getIconAndColorForCategory(String category) {
+  Map<String, dynamic> getIconAndColorForCategory(String category) {
     switch (category.toLowerCase()) {
       case 'recycle':
         return {'icon': Icons.recycling, 'color': Colors.green};
@@ -38,7 +38,7 @@ class ClassificationResultCard extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       child: Container(
         decoration: BoxDecoration(
-          color: color.withOpacity(0.2), // just changin the background
+          color: color.withOpacity(0.2), // just changing the background
           borderRadius: BorderRadius.circular(20),
         ),
         child: Padding(
@@ -61,15 +61,7 @@ class ClassificationResultCard extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 10),
-              Text(
-                advice,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500, 
-                  color: Colors.black87,
-                ),
-              ),
+              adviceWidget,
             ],
           ),
         ),

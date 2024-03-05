@@ -4,7 +4,7 @@ final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: Color.fromARGB(255, 2, 72, 113), // Deep Ocean Blue
   colorScheme: ColorScheme.light(
-    primary: Color.fromARGB(255, 4, 59, 91), // Deep Ocean Blue
+    primary: Color.fromARGB(245, 4, 59, 91), // Deep Ocean Blue
     onPrimary: Colors.white, // White text/icons on primary color
     secondary: const Color.fromARGB(255, 129, 212, 250), // Sky Blue
     onSecondary: Colors.black, // Black text/icons on secondary color
@@ -22,7 +22,7 @@ final ThemeData appTheme = ThemeData(
     ),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: Color.fromARGB(255, 129, 212, 250), // Sky Blue
+    backgroundColor: Color.fromARGB(255, 33, 150, 243), // Sky Blue
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(

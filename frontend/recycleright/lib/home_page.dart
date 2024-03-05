@@ -73,24 +73,41 @@ class _MyHomePageState extends State<MyHomePage> {
         title: RichText(
           text: TextSpan(
             style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
-                      fontFamily: 'Sans Serif',
-                      fontSize: 35, 
-                    ) ??
+                  fontFamily: 'Sans Serif',
+                  fontSize: 40,
+                  shadows: [
+                    const Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(150, 0, 0, 0),
+                    ),
+                  ],
+                ) ??
                 const TextStyle(
-                  fontSize: 35, 
+                  fontSize: 40,
                   fontWeight: FontWeight.bold,
+                  color: Colors
+                      .white, 
+                  shadows: [
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 3.0,
+                      color: Color.fromARGB(150, 0, 0, 0),
+                    ),
+                  ],
                 ),
             children: const [
-              TextSpan(text: 'R', style: TextStyle(color: Colors.blue)),
-              TextSpan(text: 'ecycle', style: TextStyle(color: Colors.black)),
-              TextSpan(text: 'R', style: TextStyle(color: Colors.green)),
-              TextSpan(text: 'ight', style: TextStyle(color: Colors.black)),
+              TextSpan(text: 'Recycle', style: TextStyle(color: Colors.blue)),
+              TextSpan(text: 'Right', style: TextStyle(color: Colors.green)),
             ],
           ),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Theme.of(context)
+            .colorScheme
+            .primary, // Ensure this is set to a dark color
       ),
+
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,

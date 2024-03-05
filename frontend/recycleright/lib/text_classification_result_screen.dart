@@ -3,11 +3,13 @@ import 'package:http/http.dart' as http;
 import 'package:recycleright/config.dart';
 import 'dart:convert';
 import 'classification_result_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TextClassificationResultScreen extends StatefulWidget {
   final String userInput;
 
-  const TextClassificationResultScreen({Key? key, required this.userInput, required String classificationResult})
+  const TextClassificationResultScreen(
+      {Key? key, required this.userInput, required String classificationResult})
       : super(key: key);
 
   @override
@@ -18,7 +20,7 @@ class TextClassificationResultScreen extends StatefulWidget {
 class _TextClassificationResultScreenState
     extends State<TextClassificationResultScreen> {
   String classificationResult = "Loading...";
-  String advice = "Please wait, analyzing text.";
+  Widget adviceWidget = const Text("Please wait, analyzing text.");
 
   @override
   void initState() {
@@ -38,35 +40,71 @@ class _TextClassificationResultScreenState
 
       String classificationKeyword =
           result['classification']['classification'].toString().trim();
-      List<dynamic> extraInfo = [];
-      String prefixText = "";
+      List<Widget> extraInfoWidgets = [];
+      String itemName = result['text'];
 
-      if (classificationKeyword == 'recycle' &&
-          result['classification'].containsKey('specifications')) {
-        extraInfo = result['classification']['specifications'];
-      } else if (classificationKeyword == 'donate' &&
+      if ((classificationKeyword == 'donate' ||
+              classificationKeyword == 'special') &&
           result['classification'].containsKey('locations')) {
-        extraInfo = result['classification']['locations'];
-        prefixText = "Locations to Donate Near You:";
-      } else if (classificationKeyword == 'special' &&
-          result['classification'].containsKey('locations')) {
-        extraInfo = result['classification']['locations'];
-        prefixText = "Locations to Consider Near You:";
+        String prefixText = classificationKeyword == 'donate'
+            ? "Google Link For Locations to Donate:"
+            : "Google Link For Locations to Consider:";
+
+        var links = [
+          "https://www.google.com/search?q=where+to+drop+off+$itemName+in+Seattle"
+        ];
+
+        extraInfoWidgets.add(Text(prefixText,
+            style: const TextStyle(fontWeight: FontWeight.bold)));
+
+        extraInfoWidgets.addAll(links
+            .map((link) => InkWell(
+                  child: Text(
+                    link,
+                    style: const TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline),
+                  ),
+                  onTap: () => _launchURL(link),
+                ))
+            .toList());
+      } else {
+        String adviceText;
+        if (classificationKeyword == 'recycle' &&
+            result['classification'].containsKey('specifications')) {
+          adviceText = result['classification']['specifications'].join('\n');
+        } else if (classificationKeyword == 'garbage') {
+          adviceText = "Please dispose of item in garbage.";
+        } else if (classificationKeyword == 'compost') {
+          adviceText = "Please compost item.";
+        } else {
+          adviceText = "";
+        }
+        extraInfoWidgets.add(Text(adviceText,
+            style: const TextStyle(fontWeight: FontWeight.bold)));
       }
 
-      String extraInfoText = extraInfo.isNotEmpty
-          ? "$prefixText\n${extraInfo.join('\n')}"
-          : "";
+      Widget adviceWidget = extraInfoWidgets.isNotEmpty
+          ? Column(children: extraInfoWidgets)
+          : const Text("");
 
       setState(() {
         classificationResult = classificationKeyword;
-        advice = extraInfoText;
+        this.adviceWidget = adviceWidget;
       });
     } else {
       setState(() {
         classificationResult = "Error";
-        advice = "Failed to classify text. Please try again.";
+        adviceWidget = const Text(
+            "LLM Server may be down. Please check your internet and try again.",
+            style: TextStyle(fontWeight: FontWeight.bold));
       });
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
     }
   }
 
@@ -77,10 +115,10 @@ class _TextClassificationResultScreenState
         title: const Text(
           'Text Results',
           style: TextStyle(
-            fontSize: 35, 
+            fontSize: 35,
             fontWeight: FontWeight.bold,
           ),
-        ),
+        ),        
         centerTitle: true,
       ),
       body: Center(
@@ -91,7 +129,7 @@ class _TextClassificationResultScreenState
               const SizedBox(height: 25.0),
               ClassificationResultCard(
                 category: classificationResult,
-                advice: advice, adviceWidget: Text(advice),
+                adviceWidget: adviceWidget,
               ),
             ],
           ),
