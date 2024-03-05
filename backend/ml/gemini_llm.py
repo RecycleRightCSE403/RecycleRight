@@ -64,11 +64,9 @@ def classify_item(item):
                        f"compost bin, recycling bin, donate, or special if there are drop-off locations for the item. Suggest "
                        f"garbage only as a last resort if the item cannot possibly be in any of the other categories.")
     classifcation = convo.last.text
-    print("Classification: ", classifcation)
 
     # Cleans up classification
     clean_classification = clean_up_classification(classifcation)
-    print("Classification: ", clean_classification)
 
     # Adds clean classification to dictionary
     response["classification"] = clean_classification
@@ -80,9 +78,7 @@ def classify_item(item):
         convo.send_message(f"Give at most 3 locations to donate " + item + " in Seattle, including the address for each one and not including any other text, "
                            f"as a semicolon separated list where each element is of the following format: Location name: location adress")
         locations_string = convo.last.text
-        print("Donation Locations String", locations_string)
         locations_list = locations_string.split('; ')
-        print("Donation Locations List", locations_list)
         response["locations"] = locations_list
 
     # For special classification, get 3 locations for drop-off centers
@@ -90,9 +86,7 @@ def classify_item(item):
         convo.send_message(f"Give at most 3 locations to drop off " + item + " in Seattle, including the address for each one and not including any other text, "
                            f"as a semicolon separated list where each element is of the following format: Location name: location adress")
         locations_string = convo.last.text
-        print("Special Locations String", locations_string)
         locations_list = locations_string.split('; ')
-        print("Special Locations List", locations_list)
         response["locations"] = locations_list
 
     # For recycle classification, get all important points user should know to correctly recycle item
@@ -100,9 +94,7 @@ def classify_item(item):
         convo.send_message(f"Give any specifications for how " + item + " should be recycled in Seattle recycling bins as a semicolon separated list "
                            f"of the format: specification 1; specification 2; etc")
         specification_string = convo.last.text
-        print("Recycling Specification String", specification_string)
         specification_list = specification_string.split('; ')
-        print("Recycling Specification List", specification_list)
         response["specifications"] = specification_list
     return response
 
