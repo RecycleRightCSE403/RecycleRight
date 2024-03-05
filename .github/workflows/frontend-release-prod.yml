@@ -29,7 +29,7 @@ jobs:
         SERVER_URL: ${{ secrets.SERVER_BASE_IP }}
       run: |
         flutter pub get
-        flutter build apk --release --dart-define SERVER_BASE_URL="${SERVER_URL}prod/"
+        flutter build apk --release --dart-define SERVER_BASE_URL="${SERVER_URL}prod"
         mv build/app/outputs/flutter-apk/app-release.apk recycle_right.apk
     - uses: softprops/action-gh-release@v1
       with:
