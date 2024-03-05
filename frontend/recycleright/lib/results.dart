@@ -5,10 +5,10 @@ import 'package:http/http.dart' as http;
 import 'package:recycleright/config.dart';
 import 'classification_result_card.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DisplayPictureScreen extends StatefulWidget {
   final String imagePath;
-
   const DisplayPictureScreen({super.key, required this.imagePath});
 
   @override
@@ -17,7 +17,7 @@ class DisplayPictureScreen extends StatefulWidget {
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   String classificationResult = "Loading...";
-  String advice = "Please wait, analyzing image.";
+  Widget adviceWidget = const Text("Please wait, analyzing image.");
 
   @override
   void initState() {
@@ -43,41 +43,84 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
 
         String classificationKeyword =
             result['classification']['classification'].toString().trim();
-        List<dynamic> extraInfo = [];
+        List<Widget> extraInfoWidgets = [];
+        String itemName = result['text'];
 
-        if (classificationKeyword == 'recycle' &&
-            result['classification'].containsKey('specifications')) {
-          extraInfo = result['classification']['specifications'];
-        } else if ((classificationKeyword == 'donate' ||
+        if ((classificationKeyword == 'donate' ||
                 classificationKeyword == 'special') &&
             result['classification'].containsKey('locations')) {
-          extraInfo = result['classification']['locations'];
+          String prefixText = classificationKeyword == 'donate'
+              ? "Google Link For Locations to Donate:"
+              : "Google Link For Locations to Consider:";
+
+          var links = [
+            "https://www.google.com/search?q=where+to+drop+off+$itemName+in+Seattle"
+          ];
+
+          extraInfoWidgets.add(Text(prefixText,
+              style: const TextStyle(fontWeight: FontWeight.bold)));
+
+          extraInfoWidgets.addAll(links
+              .map((link) => InkWell(
+                    onTap: () => _launchURL(link),
+                    child: Text(
+                      link,
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ))
+              .toList());
+        } else {
+          String adviceText = "Check item specifics for proper disposal.";
+          if (classificationKeyword == 'recycle' &&
+              result['classification'].containsKey('specifications')) {
+            adviceText = result['classification']['specifications'].join('\n');
+          } else if (classificationKeyword == 'garbage') {
+            adviceText = "Please dispose of item in garbage.";
+          } else if (classificationKeyword == 'compost') {
+            adviceText = "Please compost item.";
+          }
+
+          extraInfoWidgets.add(Text(adviceText,
+              style: const TextStyle(fontWeight: FontWeight.bold)));
         }
 
-        String extraInfoText = extraInfo.join('\n');
+        Widget adviceWidget = extraInfoWidgets.isNotEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: extraInfoWidgets)
+            : const Text("");
 
         setState(() {
           classificationResult = classificationKeyword;
-          advice = extraInfo.isNotEmpty
-              ? extraInfoText
-              : "Check item specifics for proper disposal.";
+          this.adviceWidget = adviceWidget;
         });
       } else {
         setState(() {
           classificationResult = "Failed to upload";
-          advice = "Please try again.";
+          adviceWidget = const Text(
+              "LLM Server may be down. Please check your internet and try again.",
+              style: TextStyle(fontWeight: FontWeight.bold));
         });
         print('Failed to upload image. Status code: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
         classificationResult = "Try Again";
-        advice = "Object was not detected. Make sure object is in the frame with good lighting!";
+        adviceWidget = const Text(
+            "Object was not detected. Make sure object is in the frame with good lighting!",
+            style: TextStyle(fontWeight: FontWeight.bold));
       });
       print(e.toString());
     }
   }
 
+  Future<void> _launchURL(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,10 +129,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         title: const Text(
           'Photo Results',
           style: TextStyle(
-            fontSize: 35, 
+            fontSize: 35,
             fontWeight: FontWeight.bold,
           ),
-        ),
+        ),        
         centerTitle: true,
       ),
       body: Center(
@@ -107,9 +150,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               const SizedBox(height: 25.0),
               ClassificationResultCard(
                 category: classificationResult,
-                advice: advice,
-                adviceWidget: Text(
-                    advice), 
+                adviceWidget: adviceWidget,
               ),
             ],
           ),

@@ -50,7 +50,7 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
     classification_result = classify_item(item)
     logging.info(f"LLM classified object: {item}")
     logging.info(f"Classification: {item}")
-    return {"filename": file.filename, "classification": classification_result}
+    return {"filename": file.filename, "text": item, "classification": classification_result}
 
 @app.post("/classify_text/")
 async def classify_text(text: str = Body(..., embed=True)):
