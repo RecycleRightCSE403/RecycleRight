@@ -1,9 +1,21 @@
 from dotenv import load_dotenv
-load_dotenv()
 import os
 import google.generativeai as genai
 
+# default paths
+url = 'https://detect.roboflow.com/recycleright/1'
+image_folder = 'images/'
+
+# load api key from environment
+# check if it is on the system
 api_key = os.environ.get('GEMINI_API_KEY')
+# if not then load local variable from .env
+if api_key is None:
+    load_dotenv()
+    api_key = os.environ.get('GEMINI_API_KEY')
+if api_key is None:
+    raise Exception('GEMINI_API_KEY environment variable does not exist')
+
 genai.configure(api_key=api_key)
 
 # Set up the model
