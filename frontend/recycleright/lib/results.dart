@@ -28,7 +28,6 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   Future<void> uploadImage(String filePath) async {
     try {
       var uri = Uri.parse('${getServerBaseUrl()}/classify_image/');
-      print("Posting request to $uri");
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'file',
