@@ -49,11 +49,12 @@ def classify_item(item):
                 and 'specifications'. 'classification' maps to one of 'garbage',
                 'compost', 'recycle', 'donate', 'special' or 'LLM unable to 
                 properly classify'. 'location' maps to a list of locations to 
-                dispose of the item. 'specifications' maps to a string response 
-                of how to dispose of the item. In the case that classification
-                fails, 'classification' will map to 'LLM unable to properly
-                classify' and 'location' and 'specifications' will not be in the
-                dict.
+                dispose of the item. Note that 'location' is only a key when 
+                'classification' is either 'donate' or 'special'.
+                'specifications' maps to a string response of how to dispose of
+                the item. In the case that classification fails, 
+                'classification' will map to 'LLM unable to properly classify' 
+                and 'location' and 'specifications' will not be in the dict.
     '''
     response = dict()
     convo = model.start_chat()
