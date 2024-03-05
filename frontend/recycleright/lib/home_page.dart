@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
 import 'results.dart';
 import 'text_classification_result_screen.dart';
-import 'about_page.dart'; // Make sure to import the AboutPage class
+import 'about_page.dart'; 
 
 class MyHomePage extends StatefulWidget {
   final CameraDescription camera;
   final String title;
+
   const MyHomePage({super.key, required this.camera, required this.title});
 
   @override
@@ -17,18 +19,22 @@ class _MyHomePageState extends State<MyHomePage> {
   late CameraController _controller;
   late Future<void> _initializeControllerFuture;
   final TextEditingController _textEditingController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    _controller = CameraController(widget.camera, ResolutionPreset.medium);
+    _controller = CameraController(
+      widget.camera,
+      ResolutionPreset.medium,
+    );
     _initializeControllerFuture = _controller.initialize();
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _textEditingController.dispose(); // Disposing controller
+    _textEditingController.dispose();
     super.dispose();
   }
 
@@ -49,6 +55,17 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  Future<void> _pickImageFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(imagePath: image.path),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,9 +74,10 @@ class _MyHomePageState extends State<MyHomePage> {
           text: TextSpan(
             style: Theme.of(context).appBarTheme.titleTextStyle?.copyWith(
                       fontFamily: 'Sans Serif',
+                      fontSize: 35, 
                     ) ??
                 const TextStyle(
-                  fontSize: 50,
+                  fontSize: 35, 
                   fontWeight: FontWeight.bold,
                 ),
             children: const [
@@ -81,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
-              child: Text(
+              child: const Text(
                 'Menu',
                 style: TextStyle(
                   color: Colors.white,
@@ -90,48 +108,46 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.info_outline),
-              title: Text('About'),
+              leading: const Icon(Icons.info_outline),
+              title: const Text('About'),
               onTap: () {
-                Navigator.of(context).pop(); // Close the drawer
+                Navigator.of(context).pop(); 
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => const AboutPage(),
                 ));
               },
             ),
-            // Add other ListTile widgets for more navigation options as needed
           ],
         ),
       ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _textEditingController,
-              decoration: const InputDecoration(
-                labelText: 'Search trash/objects...',
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.search),
-              ),
-              onSubmitted: (value) {
-                // When user submits text
-                if (value.isNotEmpty) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => TextClassificationResultScreen(
-                        userInput: value,
-                        classificationResult:
-                            'Classification Pending', // Placeholder for now
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                controller: _textEditingController,
+                decoration: const InputDecoration(
+                  labelText: 'Search trash/objects...',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                ),
+                onSubmitted: (value) {
+                  if (value.isNotEmpty) {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => TextClassificationResultScreen(
+                          userInput: value,
+                          classificationResult: 'Classification Pending',
+                        ),
                       ),
-                    ),
-                  );
-                }
-              },
+                    );
+                  }
+                },
+              ),
             ),
-          ),
-          Expanded(
-            child: FutureBuilder<void>(
+            FutureBuilder<void>(
               future: _initializeControllerFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
@@ -141,14 +157,39 @@ class _MyHomePageState extends State<MyHomePage> {
                 }
               },
             ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await takePicture();
-        },
-        child: const Icon(Icons.camera_alt),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton.icon(
+                    onPressed: _pickImageFromGallery,
+                    icon: const Icon(Icons.photo_library),
+                    label: const Text("Upload from Gallery"),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 50),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton.icon(
+                    onPressed: takePicture,
+                    icon: const Icon(Icons.camera_alt),
+                    label: const Text("Take Picture"),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(150, 50),
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

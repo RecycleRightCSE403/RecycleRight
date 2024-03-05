@@ -83,7 +83,13 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Photo Results'),
+        title: const Text(
+          'Photo Results',
+          style: TextStyle(
+            fontSize: 35, 
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Center(
@@ -101,7 +107,9 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               const SizedBox(height: 25.0),
               ClassificationResultCard(
                 category: classificationResult,
-                advice: advice, adviceWidget: Text(advice), 
+                advice: advice,
+                adviceWidget: Text(
+                    advice), 
               ),
             ],
           ),

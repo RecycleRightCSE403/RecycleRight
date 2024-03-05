@@ -74,7 +74,13 @@ class _TextClassificationResultScreenState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Text Classification Results'),
+        title: const Text(
+          'Text Results',
+          style: TextStyle(
+            fontSize: 35, 
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Center(
