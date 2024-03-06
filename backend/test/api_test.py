@@ -1,3 +1,7 @@
+"""
+api_test.py
+"""
+
 import os
 
 from fastapi import UploadFile
@@ -11,20 +15,27 @@ IMAGE_DIR = "images/"
 
 
 def test_images():
-    # add test cases here in image: classification format
+    """
+    Tests that the given images return the correct classification
+    :return: None
+    """
     cases = {
         'tire-large.jpg': 'garbage'
     }
     for img, ans in cases.items():
-        response = client.post('/classify_image/',
-                               files={'file': UploadFile(open(os.path.join(IMAGE_DIR, img), 'rb')).file})
+        with open(os.path.join(IMAGE_DIR, img), 'rb') as f:
+            response = client.post('/classify_image/',
+                                   files={'file': UploadFile(f).file})
         assert response.status_code == 200
         assert response.json()['classification']['classification'] == ans, \
             f'Expected {ans}, got {response.json()["classification"]} for {img}'
 
 
 def test_text():
-    # add test cases here in item: classification format
+    """
+    Tests that the text gets the correct classification
+    :return: None
+    """
     cases = {
         'battery': 'special'
     }

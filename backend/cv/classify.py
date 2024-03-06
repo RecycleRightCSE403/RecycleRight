@@ -1,3 +1,7 @@
+"""
+classify.py
+"""
+
 import base64
 import os
 
@@ -5,21 +9,21 @@ import requests
 from dotenv import load_dotenv
 
 # default paths
-url = 'https://detect.roboflow.com/recycleright/1'
-image_folder = 'images/'
+URL = 'https://detect.roboflow.com/recycleright/1'
+IMAGE_DIR = 'images/'
 
 # load api key from environment
 # check if it is on the system
-api_key = os.environ.get('ROBOFLOW_API_KEY')
+roboflow_key = os.environ.get('ROBOFLOW_API_KEY')
 # if not then load local variable from .env
-if api_key is None:
+if roboflow_key is None:
     load_dotenv()
-    api_key = os.environ.get('ROBOFLOW_API_KEY')
-if api_key is None:
+    roboflow_key = os.environ.get('ROBOFLOW_API_KEY')
+if roboflow_key is None:
     raise Exception('ROBOFLOW_API_KEY environment variable does not exist')
 
 
-def run_model(image_file, image_folder=image_folder, api_key=api_key):
+def run_model(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key):
     """
     Returns the JSON response of runing the cv model on the image.
 
@@ -40,8 +44,8 @@ def run_model(image_file, image_folder=image_folder, api_key=api_key):
                 code 200.
     """
     try:
-        with open(image_folder + image_file, 'rb') as image_file:
-            image_data = image_file.read()
+        with open(image_folder + image_file, 'rb') as img:
+            image_data = img.read()
     except FileNotFoundError as e:
         print(f'Error: file {image_file} not found')
         raise e
@@ -53,7 +57,7 @@ def run_model(image_file, image_folder=image_folder, api_key=api_key):
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     params = {'api_key': api_key, 'confidence': 1}
 
-    response = requests.post(url, data=image_base64, headers=headers, params=params)
+    response = requests.post(URL, data=image_base64, headers=headers, params=params)
 
     if not response.ok:
         response.raise_for_status()
@@ -85,7 +89,7 @@ def parse_response(json_response, max_predictions=1):
     return classes
 
 
-def classify_image(image_file, image_folder=image_folder, api_key=api_key, max_predictions=1):
+def classify_image(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key, max_predictions=1):
     """
     Returns a list of predictions from running the CV model on an image.
 

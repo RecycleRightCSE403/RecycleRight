@@ -1,13 +1,15 @@
-from cv import classify
+"""
+cv_test.py
+"""
 
-'''
-Type python -m pytest in terminal to run pytest files.
-Create functions with a name starting with 
-test_ as per standard pytest conventions.
-'''
+from cv import classify
 
 
 def test_images_with_response():
+    """
+    Tests that the images get the correct detected item
+    :return: None
+    """
     cases = {
         'test1.jpeg': 'Corrugated carton',
         'test2.jpeg': 'Plastic film',
@@ -20,6 +22,10 @@ def test_images_with_response():
 
 
 def test_images_success():
+    """
+    Tests that the images don't fail
+    :return: None
+    """
     cases = [
         'tire-small.jpg'
     ]
@@ -45,6 +51,10 @@ sample_response = {
 
 
 def test_run_model():
+    """
+    Tests output of run_model
+    :return: None
+    """
     response = classify.run_model('test2.jpeg')
     assert response['image']['width'] == 480
     assert response['image']['height'] == 640
@@ -55,39 +65,67 @@ def test_run_model():
 
 
 def test_parse():
+    """
+    Tests parsing of response
+    :return: None
+    """
     classes = classify.parse_response(sample_response)
     assert len(classes) == 1
     assert classes[0] == 'Corrugated carton'
 
 
 def test_parse_less_than_expected():
+    """
+    Tests parsing of response
+    :return: None
+    """
     classes = classify.parse_response(sample_response, max_predictions=2)
     assert len(classes) == 1
     assert classes[0] == 'Corrugated carton'
 
 
 def test_parse_more_than_expected():
+    """
+    Tests parsing of response
+    :return: None
+    """
     classes = classify.parse_response(sample_response, max_predictions=0)
     assert len(classes) == 0
 
 
 def test_classify_image():
+    """
+    Tests classifying image
+    :return: None
+    """
     classes = classify.classify_image('test2.jpeg')
     assert len(classes) == 1
     assert classes[0] == 'Plastic film'
 
 
 def test_classify_less_than_expected():
+    """
+    Tests classifying image
+    :return: None
+    """
     classes = classify.classify_image('test2.jpeg', max_predictions=10)
     assert len(classes) == 7
     assert classes[0] == 'Plastic film'
 
 
 def test_classify_more_than_expected():
+    """
+    Tests classifying image
+    :return: None
+    """
     classes = classify.classify_image('test2.jpeg', max_predictions=0)
     assert len(classes) == 0
 
 
 def test_classify_empty():
+    """
+    Tests classifying image
+    :return: None
+    """
     classes = classify.classify_image('black.jpg')
     assert len(classes) == 0

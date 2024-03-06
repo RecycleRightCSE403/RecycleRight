@@ -1,3 +1,7 @@
+"""
+gemini_llm.py
+"""
+
 import os
 
 import google.generativeai as genai
@@ -57,31 +61,34 @@ def classify_item(item):
                 classify' and 'location' and 'specifications' will not be in the
                 dict.
     """
-    response = dict()
+    response = {}
     convo = model.start_chat()
-    # convo.send_message(f"Give a one word classification of how to dispose of the following item, either recycle, "
-    # f"compost, garbage, or other: {item}")
     convo.send_message(
-        f"Give a one word classification of how to dispose of " + item + " in Seattle as either garbage bin, "
-                                                                         f"compost bin, recycling bin, donate, or special if there are drop-off locations for the item. Suggest "
-                                                                         f"garbage only as a last resort if the item cannot possibly be in any of the other categories.")
-    classifcation = convo.last.text
-    print("Classification: ", classifcation)
+        "Give a one word classification of how to dispose of " + item
+        + " in Seattle as either garbage bin, compost bin, recycling bin, "
+          "donate, or special if there are drop-off locations for the item. "
+          "Suggest garbage only as a last resort if the item cannot possibly "
+          "be in any of the other categories.")
+    classification = convo.last.text
+    print("Classification: ", classification)
 
     # Cleans up classification
-    clean_classification = clean_up_classification(classifcation)
+    clean_classification = clean_up_classification(classification)
     print("Classification: ", clean_classification)
 
     # Adds clean classification to dictionary
     response["classification"] = clean_classification
 
-    # gets extra information if needed, depending on classification, and adds to the dictionary
+    # gets extra information if needed,
+    # depending on classification, and adds to the dictionary
 
     # For donation classification, get 3 locations for donation
     if clean_classification == "donate":
         convo.send_message(
-            f"Give at most 3 locations to donate " + item + " in Seattle, including the address for each one and not including any other text, "
-                                                            f"as a semicolon separated list where each element is of the following format: Location name: location adress")
+            "Give at most 3 locations to donate " + item +
+            " in Seattle, including the address for each one and not including "
+            "any other text, as a semicolon separated list where each element "
+            "is of the following format: Location name: location adress")
         locations_string = convo.last.text
         print("Donation Locations String", locations_string)
         locations_list = locations_string.split('; ')
@@ -91,19 +98,24 @@ def classify_item(item):
     # For special classification, get 3 locations for drop-off centers
     elif clean_classification == "special":
         convo.send_message(
-            f"Give at most 3 locations to drop off " + item + " in Seattle, including the address for each one and not including any other text, "
-                                                              f"as a semicolon separated list where each element is of the following format: Location name: location adress")
+            "Give at most 3 locations to drop off " + item +
+            " in Seattle, including the address for each one and not including "
+            "any other text, as a semicolon separated list where each element "
+            "is of the following format: Location name: location address")
         locations_string = convo.last.text
         print("Special Locations String", locations_string)
         locations_list = locations_string.split('; ')
         print("Special Locations List", locations_list)
         response["locations"] = locations_list
 
-    # For recycle classification, get all important points user should know to correctly recycle item
+    # For recycle classification,
+    # get all important points user should know to correctly recycle item
     elif clean_classification == "recycle":
         convo.send_message(
-            f"Give any specifications for how " + item + " should be recycled in Seattle recycling bins as a semicolon separated list "
-                                                         f"of the format: specification 1; specification 2; etc")
+            "Give any specifications for how " + item +
+            " should be recycled in Seattle recycling bins as a semicolon "
+            "separated list of the format: specification 1; specification 2; "
+            "etc")
         specification_string = convo.last.text
         print("Recycling Specification String", specification_string)
         specification_list = specification_string.split('; ')
@@ -143,6 +155,10 @@ def clean_up_classification(initial_classification):
 
 
 def main():
+    """
+    Test function
+    :return:
+    """
     classify_item("cardboard box")
 
 

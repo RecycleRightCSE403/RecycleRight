@@ -1,12 +1,16 @@
+"""
+main.py
+"""
+
 import logging
 import os
 
+from PIL import Image
 from fastapi import FastAPI, File, UploadFile, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 
 from cv.classify import classify_image
 from ml.gemini_llm import classify_item
-from PIL import Image
 
 app = FastAPI()
 
@@ -52,14 +56,13 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
         height = int(height // scale)
         im = im.resize((width, height))
         im.save(file_location)
-    logging.info(f"File '{file.filename}' saved at '{file_location}'")
+    logging.info("File '%s' saved at '%s'", file.filename, file_location)
     classes = classify_image(tmp_filename)
     if len(classes) == 0:
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
     classification_result = classify_item(item)
-    logging.info(f"LLM classified object: {item}")
-    logging.info(f"Classification: {item}")
+    logging.info("Classification: %s", item)
     return {"filename": file.filename, "text": item, "classification": classification_result}
 
 
@@ -79,9 +82,9 @@ async def classify_text(text: str = Body(..., embed=True)):
     """
     if not text:
         raise HTTPException(status_code=400, detail="Text is required for classification.")
-    logging.info(f"Received text for classification: {text}")
+    logging.info("Received text for classification: %s", text)
     classification_result = classify_item(text)
-    logging.info(f"LLM classified text: {text} as {classification_result}")
+    logging.info("LLM classified text: %s as %s", text, classification_result)
     return {"text": text, "classification": classification_result}
 
 
