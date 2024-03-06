@@ -42,7 +42,8 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
             requests.exceptions.HTTPError: If calling the CV api does not
                 respond with code 200.
     """
-    file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
+    tmp_filename = "image-to-classify.jpg"
+    file_location = os.path.join(UPLOAD_DIRECTORY, tmp_filename)
     # resize image before saving
     with Image.open(file.file) as im:
         width, height = im.size
@@ -52,7 +53,7 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
         im = im.resize((width, height))
         im.save(file_location)
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
-    classes = classify_image(file.filename)
+    classes = classify_image(tmp_filename)
     if len(classes) == 0:
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
