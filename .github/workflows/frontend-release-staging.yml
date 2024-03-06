@@ -1,0 +1,38 @@
+name: frontend-release-staging
+
+on:
+  push:
+    tags: 
+      - "stage**"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release_frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend/recycleright
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'zulu'
+        java-version: '11'
+    - uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.16.9'
+    - name: build apk
+      env:
+        SERVER_URL: ${{ secrets.SERVER_BASE_IP }}
+      run: |
+        flutter pub get
+        flutter build apk --release --dart-define SERVER_BASE_URL="${SERVER_URL}staging"
+        mv build/app/outputs/flutter-apk/app-release.apk recycle_right.apk
+    - uses: softprops/action-gh-release@v1
+      with:
+        prerelease: true
+        files: frontend/recycleright/recycle_right.apk
+      

@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 //
 // This widget presents a card with an icon and colors corresponding to the classification
 // category (e.g., recycle, compost, other, garbage, or error), along with advice on how
-// to properly dispose of the item. It's designed to provide a visually appealing and 
+// to properly dispose of the item. It's designed to provide a visually appealing and
 // informative summary for the user.
 class ClassificationResultCard extends StatelessWidget {
   // The category of the item as determined by the classification model.
   //
   // This value is used to determine the icon and color to display on the card.
   final String category;
-
-  // A string containing advice or instructions related to the item's disposal
+  // A widget containing advice or instructions related to the item's disposal
   // based on its category.
-  final String advice;
+  final Widget adviceWidget;
+
 
   // Constructs a `ClassificationResultCard` widget.
   //
@@ -24,8 +24,7 @@ class ClassificationResultCard extends StatelessWidget {
   const ClassificationResultCard({
     Key? key,
     required this.category,
-    required this.advice,
-    required CrossAxisAlignment crossAxisAlignment,
+    required this.adviceWidget,
   }) : super(key: key);
 
   // Determines the icon and color associated with the specified category.
@@ -40,35 +39,17 @@ class ClassificationResultCard extends StatelessWidget {
   Map<String, dynamic> getIconAndColorForCategory(String category) {
     switch (category.toLowerCase()) {
       case 'recycle':
-        return {
-          'icon': Icons.recycling,
-          'color': Colors.green,
-        };
+        return {'icon': Icons.recycling, 'color': Colors.green};
       case 'compost':
-        return {
-          'icon': Icons.park,
-          'color': Colors.lightGreen,
-        };
-      case 'other':
-        return {
-          'icon': Icons.delete,
-          'color': Colors.grey,
-        };
+        return {'icon': Icons.park, 'color': Colors.lightGreen};
       case 'garbage':
-        return {
-          'icon': Icons.delete_outline,
-          'color': Colors.brown,
-        };
-      case 'error':
-        return {
-          'icon': Icons.error_outline, 
-          'color': Colors.red, 
-        };
+        return {'icon': Icons.delete_outline, 'color': Colors.brown};
+      case 'donate':
+        return {'icon': Icons.volunteer_activism, 'color': Colors.purple};
+      case 'special':
+        return {'icon': Icons.star, 'color': Colors.orange};
       default:
-        return {
-          'icon': Icons.question_mark,
-          'color': Colors.grey,
-        };
+        return {'icon': Icons.help_outline, 'color': Colors.grey};
     }
   }
 
@@ -81,33 +62,36 @@ class ClassificationResultCard extends StatelessWidget {
 
     // The card layout includes the icon, category name, and advice text.
     return Card(
-      elevation: 4, // Adds a subtle shadow for depth effect.
-      child: Padding(
-        padding: const EdgeInsets.all(16.0), // Ensures content is nicely spaced within the card.
-        child: Column(
-          mainAxisSize: MainAxisSize.min, // Minimizes the column's height to fit its content.
-          children: [
-            Icon(
-              categoryIcon,
-              size: 48,
-              color: color,
-            ),
-            const SizedBox(height: 10), // Spacing between the icon and category name.
-            Text(
-              category,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+      elevation: 8, // Adds a subtle shadow for depth effect.
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.2), // just changing the background
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0), // Ensures content is nicely spaced within the card.
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // Minimizes the column's height to fit its content.
+            children: [
+              Icon(
+                categoryIcon,
+                size: 60,
                 color: color,
               ),
-            ),
-            const SizedBox(height: 5), // Spacing between the category name and advice text.
-            Text(
-              advice,
-              textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 16),
-            ),
-          ],
+              const SizedBox(height: 12), // Spacing between the icon and category name.
+              Text(
+                category,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+              const SizedBox(height: 10), // Spacing between the category name and advice text.
+              adviceWidget,
+            ],
+          ),
         ),
       ),
     );

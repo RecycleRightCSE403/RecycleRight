@@ -2,8 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:recycleright/config.dart';
 import 'classification_result_card.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 // `DisplayPictureScreen` is a StatefulWidget that displays the captured image,
 // sends it to a server for classification, and shows the classification result
 // and corresponding advice.
@@ -26,7 +29,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   // Stores the result of the image classification.
   String classificationResult = "Loading...";
   // Stores the advice to be displayed based on the classification result.
-  String advice = "Please wait, analyzing image.";
+  Widget adviceWidget = const Text("Please wait, analyzing image.");
 
   @override
   void initState() {
@@ -41,7 +44,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   // and parses the server's response to update the UI accordingly.
   Future<void> uploadImage(String filePath) async {
     try {
-      var uri = Uri.parse('http://10.0.2.2:8000/classify_image/');
+      var uri = Uri.parse('${getServerBaseUrl()}/classify_image/');
       var request = http.MultipartRequest('POST', uri)
         ..files.add(await http.MultipartFile.fromPath(
           'file',
@@ -53,54 +56,86 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var result = jsonDecode(responseBody);
-        var classification = result['classification']
-            .toString()
-            .trim()
-            .replaceAll(RegExp(r'[. ]+'),
-                ''); 
+        print("Decoded JSON response: $result");
 
-        // Map the classification result to advice for the user.
-        String tempAdvice;
-        switch (classification) {
-          case "Recycle":
-            tempAdvice = "Please Recycle this!";
-            break;
-          case "Compost":
-            tempAdvice = "Great! This is compostable.";
-            break;
-          case "Garbage":
-            tempAdvice = "This should go to garbage.";
-            break;
-          case "Other":
-            tempAdvice = "Please dispose of this item carefully.";
-            break;
-          case "Error": // If "Error" is a possible server response
-            tempAdvice =
-                "An error occurred, check the item's disposal instructions.";
-            break;
-          default:
-            classification =
-                "Error"; // Set classification to "Error" for unknown responses
-            tempAdvice =
-                "An error occurred, check the item's disposal instructions.";
+        String classificationKeyword =
+            result['classification']['classification'].toString().trim();
+        List<Widget> extraInfoWidgets = [];
+        String itemName = result['text'];
+
+        if ((classificationKeyword == 'donate' ||
+                classificationKeyword == 'special') &&
+            result['classification'].containsKey('locations')) {
+          String prefixText = classificationKeyword == 'donate'
+              ? "Google Link For Locations to Donate:"
+              : "Google Link For Locations to Consider:";
+
+          var links = [
+            "https://www.google.com/search?q=where+to+drop+off+$itemName+in+Seattle"
+          ];
+
+          extraInfoWidgets.add(Text(prefixText,
+              style: const TextStyle(fontWeight: FontWeight.bold)));
+
+          extraInfoWidgets.addAll(links
+              .map((link) => InkWell(
+                    onTap: () => _launchURL(link),
+                    child: Text(
+                      link,
+                      style: const TextStyle(
+                          color: Colors.blue,
+                          decoration: TextDecoration.underline),
+                    ),
+                  ))
+              .toList());
+        } else {
+          String adviceText = "Check item specifics for proper disposal.";
+          if (classificationKeyword == 'recycle' &&
+              result['classification'].containsKey('specifications')) {
+            adviceText = result['classification']['specifications'].join('\n');
+          } else if (classificationKeyword == 'garbage') {
+            adviceText = "Please dispose of item in garbage.";
+          } else if (classificationKeyword == 'compost') {
+            adviceText = "Please compost item.";
+          }
+
+          extraInfoWidgets.add(Text(adviceText,
+              style: const TextStyle(fontWeight: FontWeight.bold)));
         }
+
+        Widget adviceWidget = extraInfoWidgets.isNotEmpty
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: extraInfoWidgets)
+            : const Text("");
+
         setState(() {
-          classificationResult = classification;
-          advice = tempAdvice;
+          classificationResult = classificationKeyword;
+          this.adviceWidget = adviceWidget;
         });
       } else {
         setState(() {
           classificationResult = "Failed to upload";
-          advice = "Please try again.";
+          adviceWidget = const Text(
+              "LLM Server may be down. Please check your internet and try again.",
+              style: TextStyle(fontWeight: FontWeight.bold));
         });
         print('Failed to upload image. Status code: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
-        classificationResult = "Error"; // Use "Error" for exceptions
-        advice = "An error occurred when uploading the image.";
+        classificationResult = "Try Again";
+        adviceWidget = const Text(
+            "Object was not detected. Make sure object is in the frame with good lighting!",
+            style: TextStyle(fontWeight: FontWeight.bold));
       });
       print(e.toString());
+    }
+  }
+
+  Future<void> _launchURL(String url) async {
+    if (!await launchUrl(Uri.parse(url))) {
+      throw 'Could not launch $url';
     }
   }
 
@@ -109,7 +144,13 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Photo Results'),
+        title: const Text(
+          'Photo Results',
+          style: TextStyle(
+            fontSize: 35,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
       ),
       body: Center(
@@ -125,14 +166,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 ),
               ),
               const SizedBox(height: 25.0),
-              if (classificationResult != "Loading...") // just in case
-                ClassificationResultCard(
-                  category: classificationResult,
-                  advice: advice,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                ),
-              if (classificationResult == "Loading...") // just in case
-                const CircularProgressIndicator(),
+              ClassificationResultCard(
+                category: classificationResult,
+                adviceWidget: adviceWidget,
+              ),
             ],
           ),
         ),
@@ -143,6 +180,4 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       ),
     );
   }
-
-  
 }
