@@ -21,13 +21,13 @@ class AboutPage extends StatelessWidget {
         title: const Text('About Us'),
         centerTitle: true, // Centers the title in the app bar.
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0), // Adds padding around the content for better readability.
+      body: const Padding(
+        padding: EdgeInsets.all(16.0), // Adds padding around the content for better readability.
         child: SingleChildScrollView(
           // Allows the content to be scrollable, ensuring it's accessible on devices with small screens.
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start, // Aligns content to the start of the axis.
-            children: const [
+            children: [
               // Introduction text with application name and purpose.
               Text(
                 'Welcome to RecycleRight',

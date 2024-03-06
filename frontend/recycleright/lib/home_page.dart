@@ -61,7 +61,7 @@ class _MyHomePageState extends State<MyHomePage> {
   // a picture. If successful, it navigates to a screen displaying the captured image.
   Future<void> takePicture() async {
     if (!_controller.value.isInitialized) {
-      print('Error: Pick a camera first.');
+      // print('Error: Pick a camera first.');
       return;
     }
     try {
@@ -72,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       );
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -217,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       alignment: Alignment.center,
                       children: [
                         CameraPreview(_controller), // Real-time camera preview.
-                        Icon(Icons.camera_alt, size: 64, color: Colors.white), // Camera icon overlay.
+                        // const Icon(Icons.camera_alt, size: 64, color: Colors.white), // Camera icon overlay.
                       ],
                     ),
                   );

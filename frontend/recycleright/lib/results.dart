@@ -56,7 +56,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var result = jsonDecode(responseBody);
-        print("Decoded JSON response: $result");
+        // print("Decoded JSON response: $result");
 
         String classificationKeyword =
             result['classification']['classification'].toString().trim();
@@ -120,7 +120,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
               "LLM Server may be down. Please check your internet and try again.",
               style: TextStyle(fontWeight: FontWeight.bold));
         });
-        print('Failed to upload image. Status code: ${response.statusCode}');
+        // print('Failed to upload image. Status code: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
@@ -129,7 +129,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             "Object was not detected. Make sure object is in the frame with good lighting!",
             style: TextStyle(fontWeight: FontWeight.bold));
       });
-      print(e.toString());
+      // print(e.toString());
     }
   }
 

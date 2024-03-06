@@ -8,10 +8,10 @@ import 'package:flutter/material.dart';
 // and sustainability.
 final ThemeData appTheme = ThemeData(
   brightness: Brightness.light, // Overall brightness of the app theme.
-  primaryColor: Color(0xFF111D13), // Dark green color used primarily for the app header.
+  primaryColor: const Color(0xFF111D13), // Dark green color used primarily for the app header.
 
   // Defines the color scheme for different UI components based on the app's branding.
-  colorScheme: ColorScheme.light(
+  colorScheme: const ColorScheme.light(
     primary: Color(0xFF111D13), // Dark green for primary elements like buttons and links.
     onPrimary: Color(0xFFEDEAD0), // Neutral cream color for text/icons on primary elements.
     secondary: Color(0xFF8FB996), // Light green for secondary elements and accents.
@@ -23,7 +23,7 @@ final ThemeData appTheme = ThemeData(
   ),
 
   // Customizes the AppBar appearance to match the app's theme.
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF111D13), // Dark green for the AppBar background.
     titleTextStyle: TextStyle(
       color: Color(0xFFEDEAD0), // Neutral cream color for the AppBar title.
@@ -36,14 +36,14 @@ final ThemeData appTheme = ThemeData(
   ),
 
   // Sets the theme for the FloatingActionButton.
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Color(0xFFAED581), // Custom color for the floating action button.
   ),
 
   // Defines the style for TextButtons to align with the theme.
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
-      primary: Color(0xFF111D13), // Dark green color for text on buttons.
+      foregroundColor: const Color(0xFF111D13), // Dark green color for text on buttons.
     ),
   ),
   

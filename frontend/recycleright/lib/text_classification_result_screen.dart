@@ -46,7 +46,7 @@ class _TextClassificationResultScreenState
 
     if (response.statusCode == 200) {
       var result = jsonDecode(response.body);
-      print("Decoded JSON response: $result");
+      // print("Decoded JSON response: $result");
 
       String classificationKeyword =
           result['classification']['classification'].toString().trim();
