@@ -9,3 +9,4 @@ langchain
 ctransformers
 google-generativeai
 python-dotenv
+pillow
