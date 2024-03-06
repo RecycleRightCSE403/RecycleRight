@@ -67,8 +67,8 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 classificationKeyword == 'special') &&
             result['classification'].containsKey('locations')) {
           String prefixText = classificationKeyword == 'donate'
-              ? "Google Link For Locations to Donate:"
-              : "Google Link For Locations to Consider:";
+              ? "Find Donation Centers Here:"
+              : "Discover Special Disposal Sites Here:";
 
           var links = [
             "https://www.google.com/search?q=where+to+drop+off+$itemName+in+Seattle"
@@ -92,11 +92,12 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           String adviceText = "Check item specifics for proper disposal.";
           if (classificationKeyword == 'recycle' &&
               result['classification'].containsKey('specifications')) {
-            adviceText = result['classification']['specifications'].join('\n');
+            String specificationsText = result['classification']['specifications'].join('\n');
+            adviceText = "$specificationsText\n\nPlease recycle $itemName responsibly.";
           } else if (classificationKeyword == 'garbage') {
-            adviceText = "Please dispose of item in garbage.";
+            adviceText = "Please dispose of $itemName in the garbage.";
           } else if (classificationKeyword == 'compost') {
-            adviceText = "Please compost item.";
+            adviceText = "Please compost $itemName.";
           }
 
           extraInfoWidgets.add(Text(adviceText,
@@ -117,7 +118,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         setState(() {
           classificationResult = "Failed to upload";
           adviceWidget = const Text(
-              "LLM Server may be down. Please check your internet and try again.",
+              "LLM server may be down. Please check your internet and try again.",
               style: TextStyle(fontWeight: FontWeight.bold));
         });
         // print('Failed to upload image. Status code: ${response.statusCode}');
