@@ -27,7 +27,7 @@ jobs:
       - uses: gabriel-milan/action-pylint@v1
         with:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-          path: "./*.py ml/*.py cv/*.py test/*.py"
+          path: "backend/*.py backend/ml/*.py backend/cv/*.py backend/test/*.py"
   lint-flutter:
     runs-on: ubuntu-latest
     steps:
