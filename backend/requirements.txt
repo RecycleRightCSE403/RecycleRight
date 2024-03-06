@@ -9,3 +9,4 @@ ctransformers
 google-generativeai
 python-dotenv
 pytest-retry
+pillow

@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from cv.classify import classify_image
 from ml.gemini_llm import classify_item
+from PIL import Image
 
 app = FastAPI()
 
@@ -42,8 +43,14 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
                 respond with code 200.
     """
     file_location = os.path.join(UPLOAD_DIRECTORY, file.filename)
-    with open(file_location, "wb+") as file_object:
-        file_object.write(file.file.read())
+    # resize image before saving
+    with Image.open(file.file) as im:
+        width, height = im.size
+        scale = max(width, height) / 512
+        width = int(width // scale)
+        height = int(height // scale)
+        im = im.resize((width, height))
+        im.save(file_location)
     logging.info(f"File '{file.filename}' saved at '{file_location}'")
     classes = classify_image(file.filename)
     if len(classes) == 0:
