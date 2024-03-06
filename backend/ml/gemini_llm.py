@@ -1,9 +1,21 @@
 from dotenv import load_dotenv
-load_dotenv()
 import os
 import google.generativeai as genai
 
+# default paths
+url = 'https://detect.roboflow.com/recycleright/1'
+image_folder = 'images/'
+
+# load api key from environment
+# check if it is on the system
 api_key = os.environ.get('GEMINI_API_KEY')
+# if not then load local variable from .env
+if api_key is None:
+    load_dotenv()
+    api_key = os.environ.get('GEMINI_API_KEY')
+if api_key is None:
+    raise Exception('GEMINI_API_KEY environment variable does not exist')
+
 genai.configure(api_key=api_key)
 
 # Set up the model
@@ -49,11 +61,12 @@ def classify_item(item):
                 and 'specifications'. 'classification' maps to one of 'garbage',
                 'compost', 'recycle', 'donate', 'special' or 'LLM unable to 
                 properly classify'. 'location' maps to a list of locations to 
-                dispose of the item. 'specifications' maps to a string response 
-                of how to dispose of the item. In the case that classification
-                fails, 'classification' will map to 'LLM unable to properly
-                classify' and 'location' and 'specifications' will not be in the
-                dict.
+                dispose of the item. Note that 'location' is only a key when 
+                'classification' is either 'donate' or 'special'.
+                'specifications' maps to a string response of how to dispose of
+                the item. In the case that classification fails, 
+                'classification' will map to 'LLM unable to properly classify' 
+                and 'location' and 'specifications' will not be in the dict.
     '''
     response = dict()
     convo = model.start_chat()
@@ -64,11 +77,9 @@ def classify_item(item):
                        f"garbage only as a last resort if the item cannot "
                        f"possibly be in any of the other categories.")
     classifcation = convo.last.text
-    print("Classification: ", classifcation)
 
     # Cleans up classification
     clean_classification = clean_up_classification(classifcation)
-    print("Classification: ", clean_classification)
 
     # Adds clean classification to dictionary
     response["classification"] = clean_classification
@@ -84,9 +95,7 @@ def classify_item(item):
                            f"separated list where each element is of the "
                            f"following format: Location name: location adress")
         locations_string = convo.last.text
-        print("Donation Locations String", locations_string)
         locations_list = locations_string.split('; ')
-        print("Donation Locations List", locations_list)
         response["locations"] = locations_list
 
     # For special classification, get 3 locations for drop-off centers
@@ -98,9 +107,7 @@ def classify_item(item):
                            f"is of the following format: Location name: "
                            f"location adress")
         locations_string = convo.last.text
-        print("Special Locations String", locations_string)
         locations_list = locations_string.split('; ')
-        print("Special Locations List", locations_list)
         response["locations"] = locations_list
 
     # For recycle classification, get all important points user should know to 
@@ -111,9 +118,7 @@ def classify_item(item):
                            f"semicolon separated list of the format: "
                            f"specification 1; specification 2; etc")
         specification_string = convo.last.text
-        print("Recycling Specification String", specification_string)
         specification_list = specification_string.split('; ')
-        print("Recycling Specification List", specification_list)
         response["specifications"] = specification_list
     return response
 
