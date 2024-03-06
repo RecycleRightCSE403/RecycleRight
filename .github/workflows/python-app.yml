@@ -5,6 +5,8 @@ name: pytest
 
 on:
   push:
+    paths:
+      - 'backend/**'
   workflow_dispatch:
 
 permissions:
