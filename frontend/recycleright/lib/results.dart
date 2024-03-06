@@ -4,10 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'classification_result_card.dart';
 import 'package:http_parser/http_parser.dart';
-
+// `DisplayPictureScreen` is a StatefulWidget that displays the captured image,
+// sends it to a server for classification, and shows the classification result
+// and corresponding advice.
+//
+// It also allows users to provide feedback on the classification accuracy.
 class DisplayPictureScreen extends StatefulWidget {
+  // The path to the image file that will be displayed and classified.
   final String imagePath;
 
+  // Constructs a `DisplayPictureScreen` widget.
+  //
+  // Requires an [imagePath] parameter that specifies the location of the image to be classified.
   const DisplayPictureScreen({super.key, required this.imagePath});
 
   @override
@@ -15,7 +23,9 @@ class DisplayPictureScreen extends StatefulWidget {
 }
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+  // Stores the result of the image classification.
   String classificationResult = "Loading...";
+  // Stores the advice to be displayed based on the classification result.
   String advice = "Please wait, analyzing image.";
 
   @override
@@ -24,6 +34,11 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     uploadImage(widget.imagePath);
   }
 
+  // Uploads the image at [filePath] to a server for classification and updates
+  // the state with the classification result and advice.
+  //
+  // It constructs a POST request with the image, sends it to a predetermined URI,
+  // and parses the server's response to update the UI accordingly.
   Future<void> uploadImage(String filePath) async {
     try {
       var uri = Uri.parse('http://10.0.2.2:8000/classify_image/');
@@ -44,6 +59,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             .replaceAll(RegExp(r'[. ]+'),
                 ''); 
 
+        // Map the classification result to advice for the user.
         String tempAdvice;
         switch (classification) {
           case "Recycle":
@@ -88,7 +104,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     }
   }
 
-
+  // Builds the UI to display the image, classification result, advice, and a feedback button.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,4 +143,6 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       ),
     );
   }
+
+  
 }
