@@ -1,6 +1,6 @@
 # RecycleRight
 
-[![flutter-test](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml)[![pytest](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/python-app.yml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/python-app.yml)
+[![flutter-test](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/flutter_test.yaml)[![pytest](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/python-app.yml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/python-app.yml)[![linter](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/linter.yml/badge.svg)](https://github.com/RecycleRightCSE403/RecycleRight/actions/workflows/linter.yml)
 
 ## Overview
 

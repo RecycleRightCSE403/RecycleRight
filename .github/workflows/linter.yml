@@ -32,5 +32,8 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.16.9'
-      - run: cd frontend/recycleright & flutter analyze
+      - run: |
+          cd frontend/recycleright
+          flutter pub get
+          flutter analyze
     
