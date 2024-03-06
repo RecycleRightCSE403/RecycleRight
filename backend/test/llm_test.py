@@ -1,6 +1,9 @@
+import pytest
+
 from ml import gemini_llm as llm
 
 
+@pytest.mark.flaky(retries=3, delay=1)
 def test_keywords_with_response():
     cases = {
         'battery': 'special',
