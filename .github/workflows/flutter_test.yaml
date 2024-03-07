@@ -3,6 +3,8 @@ on:
   push:
     paths:
       - 'frontend/recycleright/**'
+  pull_request:
+    branches: ['main']
   workflow_dispatch:
 jobs:
   drive:
