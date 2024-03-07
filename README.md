@@ -142,9 +142,8 @@ To add a test on the backend:
 6. For more details, see [Testing - FastAPI](https://fastapi.tiangolo.com/tutorial/testing/)
 7. Minimal example (tests that 1 == 1):
 ```python
-def test() {
+def test():
     assert 1 == 1
-}
 ```
 
 #### Style

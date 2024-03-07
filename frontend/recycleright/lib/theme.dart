@@ -14,7 +14,7 @@ final ThemeData appTheme = ThemeData(
     onSurface: Colors.black, // Black text/icons on surface color
   ),
   appBarTheme: const AppBarTheme(
-    backgroundColor: Color.fromARGB(255, 2, 119, 189), // Deep Ocean Blue
+    backgroundColor: Color.fromARGB(245, 4, 59, 91), // Deep Ocean Blue
     titleTextStyle: TextStyle(
       color: Colors.white,
       fontSize: 20, // Adjusted for better readability
@@ -22,13 +22,13 @@ final ThemeData appTheme = ThemeData(
     ),
   ),
   floatingActionButtonTheme: const FloatingActionButtonThemeData(
-    backgroundColor: Color.fromARGB(255, 33, 150, 243), // Sky Blue
+    backgroundColor: Color.fromARGB(245, 4, 59, 91), // Sky Blue
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       primary: const Color.fromARGB(255, 2, 119, 189), // Deep Ocean Blue text
     ),
   ),
-  
+
   useMaterial3: true,
 );

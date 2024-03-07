@@ -7,8 +7,18 @@ import 'classification_result_card.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// `DisplayPictureScreen` is a StatefulWidget that displays the captured image,
+// sends it to a server for classification, and shows the classification result
+// and corresponding advice.
+//
+// It also allows users to provide feedback on the classification accuracy.
 class DisplayPictureScreen extends StatefulWidget {
+  // The path to the image file that will be displayed and classified.
   final String imagePath;
+
+  // Constructs a `DisplayPictureScreen` widget.
+  //
+  // Requires an [imagePath] parameter that specifies the location of the image to be classified.
   const DisplayPictureScreen({super.key, required this.imagePath});
 
   @override
@@ -16,7 +26,9 @@ class DisplayPictureScreen extends StatefulWidget {
 }
 
 class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
+  // Stores the result of the image classification.
   String classificationResult = "Loading...";
+  // Stores the advice to be displayed based on the classification result.
   Widget adviceWidget = const Text("Please wait, analyzing image.");
 
   @override
@@ -25,6 +37,11 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     uploadImage(widget.imagePath);
   }
 
+  // Uploads the image at [filePath] to a server for classification and updates
+  // the state with the classification result and advice.
+  //
+  // It constructs a POST request with the image, sends it to a predetermined URI,
+  // and parses the server's response to update the UI accordingly.
   Future<void> uploadImage(String filePath) async {
     try {
       var uri = Uri.parse('${getServerBaseUrl()}/classify_image/');
@@ -39,7 +56,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
       if (response.statusCode == 200) {
         var responseBody = await response.stream.bytesToString();
         var result = jsonDecode(responseBody);
-        print("Decoded JSON response: $result");
+        // print("Decoded JSON response: $result");
 
         String classificationKeyword =
             result['classification']['classification'].toString().trim();
@@ -50,8 +67,8 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 classificationKeyword == 'special') &&
             result['classification'].containsKey('locations')) {
           String prefixText = classificationKeyword == 'donate'
-              ? "Google Link For Locations to Donate:"
-              : "Google Link For Locations to Consider:";
+              ? "Find Donation Centers Here:"
+              : "Discover Special Disposal Sites Here:";
 
           var links = [
             "https://www.google.com/search?q=where+to+drop+off+$itemName+in+Seattle"
@@ -75,11 +92,12 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
           String adviceText = "Check item specifics for proper disposal.";
           if (classificationKeyword == 'recycle' &&
               result['classification'].containsKey('specifications')) {
-            adviceText = result['classification']['specifications'].join('\n');
+            String specificationsText = result['classification']['specifications'].join('\n');
+            adviceText = "$specificationsText\n\nPlease recycle $itemName responsibly.";
           } else if (classificationKeyword == 'garbage') {
-            adviceText = "Please dispose of item in garbage.";
+            adviceText = "Please dispose of $itemName in the garbage.";
           } else if (classificationKeyword == 'compost') {
-            adviceText = "Please compost item.";
+            adviceText = "Please compost $itemName.";
           }
 
           extraInfoWidgets.add(Text(adviceText,
@@ -100,10 +118,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
         setState(() {
           classificationResult = "Failed to upload";
           adviceWidget = const Text(
-              "LLM Server may be down. Please check your internet and try again.",
+              "LLM server may be down. Please check your internet and try again.",
               style: TextStyle(fontWeight: FontWeight.bold));
         });
-        print('Failed to upload image. Status code: ${response.statusCode}');
+        // print('Failed to upload image. Status code: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
@@ -112,7 +130,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             "Object was not detected. Make sure object is in the frame with good lighting!",
             style: TextStyle(fontWeight: FontWeight.bold));
       });
-      print(e.toString());
+      // print(e.toString());
     }
   }
 
@@ -122,6 +140,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
     }
   }
 
+  // Builds the UI to display the image, classification result, advice, and a feedback button.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -132,7 +151,7 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
             fontSize: 35,
             fontWeight: FontWeight.bold,
           ),
-        ),        
+        ),
         centerTitle: true,
       ),
       body: Center(

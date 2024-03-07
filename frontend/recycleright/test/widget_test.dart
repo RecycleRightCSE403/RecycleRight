@@ -6,13 +6,13 @@ import 'package:recycleright/main.dart';
 
 void main() {
   testWidgets('App initialization test', (WidgetTester tester) async {
-    final CameraDescription fakeCamera = CameraDescription(
+    const CameraDescription fakeCamera = CameraDescription(
       name: '0', 
       lensDirection: CameraLensDirection.back, 
       sensorOrientation: 90, 
     );
 
-    await tester.pumpWidget(MyApp(camera: fakeCamera));
+    await tester.pumpWidget(const MyApp(camera: fakeCamera));
 
     expect(find.byType(MaterialApp), findsOneWidget);
   });

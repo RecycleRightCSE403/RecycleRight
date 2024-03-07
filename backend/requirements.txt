@@ -10,3 +10,4 @@ google-generativeai
 python-dotenv
 pytest-retry
 pillow
+pytest-asyncio
