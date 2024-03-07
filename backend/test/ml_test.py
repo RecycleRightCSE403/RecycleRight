@@ -48,17 +48,15 @@ def test_accuracy(trials=NUM_TRIALS, threshold=ACCURACY_THRESHOLD):
             if correct / trials > threshold:
                 assert True
 
-def test_special(trials=NUM_TRIALS):
+@pytest.mark.flaky(retries=NUM_TRIALS, delay=1)
+def test_special():
     '''
     Tests special responses are formatted correctly
     :return: None
     '''
-    for _ in range(trials):
-        response = llm.classify_item('battery')
-        if response['classification'] == 'special':
-            assert response['locations'] is not None
-            return
-    assert False
+    response = llm.classify_item('battery')
+    assert response['classification'] == 'special'
+    assert response['locations'] is not None
 
 def test_clean_classification():
     '''
