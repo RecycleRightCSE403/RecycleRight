@@ -1,5 +1,8 @@
-from dotenv import load_dotenv
+"""
+gemini_llm.py
+"""
 import os
+from dotenv import load_dotenv
 import google.generativeai as genai
 
 # load api key from environment
@@ -9,8 +12,6 @@ api_key = os.environ.get('GEMINI_API_KEY')
 if api_key is None:
     load_dotenv()
     api_key = os.environ.get('GEMINI_API_KEY')
-if api_key is None:
-    raise Exception('GEMINI_API_KEY environment variable does not exist')
 
 genai.configure(api_key=api_key)
 
@@ -65,14 +66,14 @@ def classify_item(item):
                 'classification' will map to 'LLM unable to properly classify' 
                 and 'location' and 'specifications' will not be in the dict.
     """
-    response = dict()
+    response = {}
     convo = model.start_chat()
-    convo.send_message(f"Give a one word classification of how to dispose "
-                       f"of " + item + " in Seattle as either garbage bin, "
-                       f"compost bin, recycling bin, donate, or special if "
-                       f"there are drop-off locations for the item. Suggest "
-                       f"garbage only as a last resort if the item cannot "
-                       f"possibly be in any of the other categories.")
+    convo.send_message("Give a one word classification of how to dispose "
+                       "of " + item + " in Seattle as either garbage bin, "
+                       "compost bin, recycling bin, donate, or special if "
+                       "there are drop-off locations for the item. Suggest "
+                       "garbage only as a last resort if the item cannot "
+                       "possibly be in any of the other categories.")
     classifcation = convo.last.text
 
     # Cleans up classification
@@ -86,34 +87,34 @@ def classify_item(item):
 
     # For donation classification, get 3 locations for donation
     if clean_classification == "donate":
-        convo.send_message(f"Give at most 3 locations to donate " + item + " in"
-                           f"Seattle, including the address for each one and "
-                           f"not including any other text, as a semicolon "
-                           f"separated list where each element is of the "
-                           f"following format: Location name: location adress")
+        convo.send_message("Give at most 3 locations to donate " + item + " in"
+                           "Seattle, including the address for each one and "
+                           "not including any other text, as a semicolon "
+                           "separated list where each element is of the "
+                           "following format: Location name: location adress")
         locations_string = convo.last.text
         locations_list = locations_string.split('; ')
         response["locations"] = locations_list
 
     # For special classification, get 3 locations for drop-off centers
     elif clean_classification == "special":
-        convo.send_message(f"Give at most 3 locations to drop off " + item +
-                           f" in Seattle, including the address for each one "
-                           f"and not including any other text, "
-                           f"as a semicolon separated list where each element "
-                           f"is of the following format: Location name: "
-                           f"location adress")
+        convo.send_message("Give at most 3 locations to drop off " + item +
+                           " in Seattle, including the address for each one "
+                           "and not including any other text, "
+                           "as a semicolon separated list where each element "
+                           "is of the following format: Location name: "
+                           "location adress")
         locations_string = convo.last.text
         locations_list = locations_string.split('; ')
         response["locations"] = locations_list
 
-    # For recycle classification, get all important points user should know to 
+    # For recycle classification, get all important points user should know to
     # correctly recycle item
     elif clean_classification == "recycle":
-        convo.send_message(f"Give any specifications for how " + item +
-                           f"should be recycled in Seattle recycling bins as a "
-                           f"semicolon separated list of the format: "
-                           f"specification 1; specification 2; etc")
+        convo.send_message("Give any specifications for how " + item +
+                           "should be recycled in Seattle recycling bins as a "
+                           "semicolon separated list of the format: "
+                           "specification 1; specification 2; etc")
         specification_string = convo.last.text
         specification_list = specification_string.split('; ')
         response["specifications"] = specification_list
