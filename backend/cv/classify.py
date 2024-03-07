@@ -6,11 +6,13 @@ import base64
 import os
 
 import requests
+from requests.exceptions import Timeout
 from dotenv import load_dotenv
 
-# default paths
+# defaults
 URL = 'https://detect.roboflow.com/recycleright/1'
 IMAGE_DIR = 'images/'
+TIMEOUT_SECONDS = 10
 
 # load api key from environment
 # check if it is on the system
@@ -52,12 +54,20 @@ def run_model(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key):
 
     image_base64 = base64.b64encode(image_data).decode('utf-8')
     # api expects lines 76 characters long
-    image_base64 = '\n'.join(image_base64[i: i + 76] for i in range(0, len(image_base64), 76))
+    image_base64 = '\n'.join(
+            image_base64[i: i + 76] for i in range(0, len(image_base64), 76)
+            )
 
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     params = {'api_key': api_key, 'confidence': 1}
 
-    response = requests.post(URL, data=image_base64, headers=headers, params=params)
+    response = requests.post(
+            URL,
+            data=image_base64,
+            headers=headers,
+            params=params,
+            timeout=TIMEOUT_SECONDS
+            )
 
     if not response.ok:
         response.raise_for_status()
@@ -89,7 +99,8 @@ def parse_response(json_response, max_predictions=1):
     return classes
 
 
-def classify_image(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key, max_predictions=1):
+def classify_image(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key,
+                   max_predictions=1):
     """
     Returns a list of predictions from running the CV model on an image.
 
@@ -110,4 +121,5 @@ def classify_image(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key, max
             FileNotFoundError: If image_file is not found in image_folder.
             Exception: If the CV model does not respond with code 200.
     """
-    return parse_response(run_model(image_file, image_folder, api_key), max_predictions)
+    response = run_model(image_file, image_folder, api_key)
+    return parse_response(response, max_predictions)
