@@ -6,7 +6,6 @@ import base64
 import os
 
 import requests
-from requests.exceptions import Timeout
 from dotenv import load_dotenv
 
 # defaults
@@ -21,9 +20,6 @@ roboflow_key = os.environ.get('ROBOFLOW_API_KEY')
 if roboflow_key is None:
     load_dotenv()
     roboflow_key = os.environ.get('ROBOFLOW_API_KEY')
-if roboflow_key is None:
-    raise Exception('ROBOFLOW_API_KEY environment variable does not exist')
-
 
 def run_model(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key):
     """

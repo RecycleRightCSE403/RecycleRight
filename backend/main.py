@@ -62,8 +62,8 @@ async def classify_image_endpoint(file: UploadFile = File(...)):
         return {"filename": file.filename, "classification": "Error"}
     item = classes[0]
     classification_result = classify_item(item)
-    logging.info(f"LLM classified object: {item}")
-    logging.info(f"Classification: {item}")
+    logging.info("LLM classified object: %s", item)
+    logging.info("Classification: %s", item)
     response = {
             "filename": file.filename,
             "text": item,
@@ -91,7 +91,7 @@ async def classify_text(text: str = Body(..., embed=True)):
                 status_code=400,
                 detail="Text is required for classification."
                 )
-    logging.info(f"Received text for classification: {text}")
+    logging.info("Received text for classification: %s", text)
     classification_result = classify_item(text)
     logging.info("LLM classified text: %s as %s", text, classification_result)
     return {"text": text, "classification": classification_result}
