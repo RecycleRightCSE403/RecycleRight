@@ -11,10 +11,10 @@ def test_images_with_response():
     :return: None
     """
     cases = {
-        'test1.jpeg': 'Corrugated carton',
-        'test2.jpeg': 'Plastic film',
-        'test3.jpeg': 'Corrugated carton',
-        'test4.jpg': 'Corrugated carton'
+        'test1.jpeg': 'paper',
+        'test2.jpeg': 'metals_and_plastic',
+        'test3.jpeg': 'metals_and_plastic',
+        'test4.jpg': 'non_recyclable'
     }
     for img, ans in cases.items():
         classes = classify.classify_image(img)
@@ -58,10 +58,10 @@ def test_run_model():
     response = classify.run_model('test2.jpeg')
     assert response['image']['width'] == 480
     assert response['image']['height'] == 640
-    assert response['predictions'][0]['x'] == 194.0
-    assert response['predictions'][0]['y'] == 251.0
-    assert response['predictions'][0]['width'] == 270.0
-    assert response['predictions'][0]['height'] == 178.0
+    assert response['predictions'][0]['x'] == 180.0
+    assert response['predictions'][0]['y'] == 308.0
+    assert response['predictions'][0]['width'] == 180.0
+    assert response['predictions'][0]['height'] == 120.0
 
 
 def test_parse():
@@ -100,7 +100,7 @@ def test_classify_image():
     """
     classes = classify.classify_image('test2.jpeg')
     assert len(classes) == 1
-    assert classes[0] == 'Plastic film'
+    assert classes[0] == 'metals_and_plastic'
 
 
 def test_classify_less_than_expected():
@@ -109,8 +109,8 @@ def test_classify_less_than_expected():
     :return: None
     """
     classes = classify.classify_image('test2.jpeg', max_predictions=10)
-    assert len(classes) == 7
-    assert classes[0] == 'Plastic film'
+    assert len(classes) == 10
+    assert classes[0] == 'metals_and_plastic'
 
 
 def test_classify_more_than_expected():
