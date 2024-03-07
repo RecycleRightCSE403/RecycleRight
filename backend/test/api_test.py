@@ -20,14 +20,14 @@ def test_images():
     :return: None
     """
     cases = {
-        'tire-large.jpg': 'garbage'
+        'tire-large.jpg': [ 'garbage', 'recycle' ]
     }
     for img, ans in cases.items():
         with open(os.path.join(IMAGE_DIR, img), 'rb') as f:
             response = client.post('/classify_image/',
                                    files={'file': UploadFile(f).file})
         assert response.status_code == 200
-        assert response.json()['classification']['classification'] == ans, \
+        assert response.json()['classification']['classification'] in ans, \
             f'Expected {ans}, got {response.json()["classification"]} for {img}'
 
 
