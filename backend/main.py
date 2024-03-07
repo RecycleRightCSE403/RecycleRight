@@ -90,4 +90,7 @@ async def classify_text(text: str = Body(..., embed=True)):
 
 @app.post("/report_image/")
 async def report_image(file: UploadFile, text: str):
-    return {"filename": file}
+    """
+    Unimplemented
+    """
+    return { "text": text, "filename": file }
