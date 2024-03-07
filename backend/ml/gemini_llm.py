@@ -2,10 +2,6 @@ from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 
-# default paths
-url = 'https://detect.roboflow.com/recycleright/1'
-image_folder = 'images/'
-
 # load api key from environment
 # check if it is on the system
 api_key = os.environ.get('GEMINI_API_KEY')
@@ -100,7 +96,7 @@ def classify_item(item):
 
     # For special classification, get 3 locations for drop-off centers
     elif clean_classification == "special":
-        convo.send_message(f"Give at most 3 locations to drop off " + item
+        convo.send_message(f"Give at most 3 locations to drop off " + item +
                            f" in Seattle, including the address for each one "
                            f"and not including any other text, "
                            f"as a semicolon separated list where each element "
@@ -113,7 +109,7 @@ def classify_item(item):
     # For recycle classification, get all important points user should know to 
     # correctly recycle item
     elif clean_classification == "recycle":
-        convo.send_message(f"Give any specifications for how " + item 
+        convo.send_message(f"Give any specifications for how " + item +
                            f"should be recycled in Seattle recycling bins as a "
                            f"semicolon separated list of the format: "
                            f"specification 1; specification 2; etc")
