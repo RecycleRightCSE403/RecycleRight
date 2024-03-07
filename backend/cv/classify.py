@@ -9,7 +9,7 @@ import requests
 from dotenv import load_dotenv
 
 # defaults
-URL = 'https://detect.roboflow.com/recycleright/1'
+URL = 'https://detect.roboflow.com/taco_yolov8_fixed_1/3'
 IMAGE_DIR = 'images/'
 TIMEOUT_SECONDS = 10
 
@@ -65,6 +65,7 @@ def run_model(image_file, image_folder=IMAGE_DIR, api_key=roboflow_key):
             timeout=TIMEOUT_SECONDS
             )
 
+    print(response.json())
     if not response.ok:
         response.raise_for_status()
 
